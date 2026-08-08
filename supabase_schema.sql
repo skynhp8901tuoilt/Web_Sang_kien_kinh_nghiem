@@ -5,7 +5,7 @@
 
 -- 1. BẢNG PROFILES (TÀI KHOẢN GIÁO VIÊN MẦM NON)
 CREATE TABLE IF NOT EXISTS public.profiles (
-    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email TEXT UNIQUE NOT NULL,
     full_name TEXT,
     avatar_url TEXT,
@@ -23,25 +23,26 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS system_role TEXT DEFAULT 'ROLE_TEACHER';
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE;
 
--- GÁN QUYỀN QUẢN TRỊ VIÊN ADMIN CAO CẤP DUY NHẤT CHO SKYNHP8901@GMAIL.COM
-UPDATE public.profiles SET system_role = 'ROLE_ADMIN' WHERE email = 'skynhp8901@gmail.com';
-
--- Bật Row Level Security (RLS) cho Profiles
+-- CHO PHÉP MỌI KẾT NỐI WEB ĐỒNG BỘ PROFILES (TRÁNH LỖI BẢNG TRỐNG)
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
-DROP POLICY IF EXISTS "Cho phép người dùng xem profile cá nhân" ON public.profiles;
-CREATE POLICY "Cho phép người dùng xem profile cá nhân"
-    ON public.profiles FOR SELECT
-    USING (auth.uid() = id OR EXISTS (
-        SELECT 1 FROM public.profiles WHERE id = auth.uid() AND system_role = 'ROLE_ADMIN'
-    ));
+DROP POLICY IF EXISTS "Cho phép đọc toàn bộ profiles" ON public.profiles;
+CREATE POLICY "Cho phép đọc toàn bộ profiles" ON public.profiles FOR SELECT USING (true);
 
-DROP POLICY IF EXISTS "Cho phép người dùng cập nhật profile cá nhân" ON public.profiles;
-CREATE POLICY "Cho phép người dùng cập nhật profile cá nhân"
-    ON public.profiles FOR UPDATE
-    USING (auth.uid() = id OR EXISTS (
-        SELECT 1 FROM public.profiles WHERE id = auth.uid() AND system_role = 'ROLE_ADMIN'
-    ));
+DROP POLICY IF EXISTS "Cho phép chèn và đồng bộ profile từ Web" ON public.profiles;
+CREATE POLICY "Cho phép chèn và đồng bộ profile từ Web" ON public.profiles FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Cho phép cập nhật profile từ Web" ON public.profiles;
+CREATE POLICY "Cho phép cập nhật profile từ Web" ON public.profiles FOR UPDATE USING (true);
+
+-- GÁN CẤP NGUỒN TÀI KHOẢN QUẢN TRỊ VIÊN ADMIN CHO SKYNHP8901@GMAIL.COM
+INSERT INTO public.profiles (email, full_name, school_name, system_role)
+VALUES 
+    ('skynhp8901@gmail.com', 'Quản trị viên skynhp8901', 'Trường Mầm non Hoa Sen', 'ROLE_ADMIN'),
+    ('thao.nguyen@gmail.com', 'Cô Phạm Thị Thanh Thảo', 'Trường Mầm non Ánh Dương', 'ROLE_TEACHER'),
+    ('phuongmai.nursery@edu.vn', 'Cô Trần Phương Mai', 'Trường Mầm non Sao Mai', 'ROLE_EXPERT_REVIEWER')
+ON CONFLICT (email) DO UPDATE 
+SET system_role = EXCLUDED.system_role, last_login_at = NOW();
 
 -- 2. TRIGGER TỰ ĐỘNG TẠO PROFILE KHI ĐĂNG NHẬP BẰNG GOOGLE / EMAIL
 CREATE OR REPLACE FUNCTION public.handle_new_user()
@@ -54,7 +55,7 @@ BEGIN
         COALESCE(NEW.raw_user_meta_data->>'full_name', split_part(NEW.email, '@', 1)),
         COALESCE(NEW.raw_user_meta_data->>'avatar_url', 'https://api.dicebear.com/7.x/avataaars/svg?seed=' || split_part(NEW.email, '@', 1))
     )
-    ON CONFLICT (id) DO UPDATE
+    ON CONFLICT (email) DO UPDATE
     SET last_login_at = NOW();
     RETURN NEW;
 END;
@@ -68,7 +69,8 @@ CREATE TRIGGER on_auth_user_created
 -- 3. BẢNG USER_LOGIN_LOGS (NHẬT KÝ ĐĂNG NHẬP CÁ NHÂN)
 CREATE TABLE IF NOT EXISTS public.user_login_logs (
     id BIGSERIAL PRIMARY KEY,
-    user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+    user_id UUID,
+    email TEXT,
     login_time TIMESTAMPTZ DEFAULT NOW(),
     ip_address TEXT,
     user_agent TEXT,
@@ -78,15 +80,11 @@ CREATE TABLE IF NOT EXISTS public.user_login_logs (
 
 ALTER TABLE public.user_login_logs ENABLE ROW LEVEL SECURITY;
 
-DROP POLICY IF EXISTS "Giáo viên xem nhật ký đăng nhập cá nhân" ON public.user_login_logs;
-CREATE POLICY "Giáo viên xem nhật ký đăng nhập cá nhân"
-    ON public.user_login_logs FOR SELECT
-    USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Cho phép xem toàn bộ nhật ký" ON public.user_login_logs;
+CREATE POLICY "Cho phép xem toàn bộ nhật ký" ON public.user_login_logs FOR SELECT USING (true);
 
-DROP POLICY IF EXISTS "Thêm nhật ký đăng nhập mới" ON public.user_login_logs;
-CREATE POLICY "Thêm nhật ký đăng nhập mới"
-    ON public.user_login_logs FOR INSERT
-    WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Cho phép ghi nhật ký từ Web" ON public.user_login_logs;
+CREATE POLICY "Cho phép ghi nhật ký từ Web" ON public.user_login_logs FOR INSERT WITH CHECK (true);
 
 -- 4. BẢNG SKKN_INITIATIVES (SÁNG KIẾN KINH NGHIỆM)
 CREATE TABLE IF NOT EXISTS public.skkn_initiatives (

@@ -461,7 +461,7 @@ const SLIDES_DATA = [
         tag: "BÁO CÁO SÁNG KIẾN KINH NGHIỆM",
         title: "BIỆN PHÁP RÈN LUYỆN KỸ NĂNG TỰ PHỤC VỤ CHO TRẺ 5-6 TUỔI",
         sub: "Thông qua các hoạt động trải nghiệm thực tế tại trường Mầm non",
-        reporter: "Nguyễn Thị Phương Thảo",
+        reporter: "skynhp8901 (skynhp8901@gmail.com)",
         school: "Trường Mầm non Hoa Sen"
     },
     {
@@ -517,7 +517,7 @@ const SLIDES_DATA = [
         tag: "VII. KẾT LUẬN",
         title: "XIN CHÂN THÀNH CẢM ƠN HỘI ĐỒNG THẨM ĐỊNH!",
         sub: "Kính chúc Hội đồng Thẩm định SKKN sức khỏe và hạnh phúc!",
-        reporter: "Báo cáo viên: Nguyễn Thị Phương Thảo",
+        reporter: "Báo cáo viên: skynhp8901 (skynhp8901@gmail.com)",
         school: "Đơn vị: Trường Mầm non Hoa Sen"
     }
 ];

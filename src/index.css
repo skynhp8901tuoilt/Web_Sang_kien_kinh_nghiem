@@ -154,6 +154,25 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+.admin-nav-btn {
+    border: 1px dashed var(--accent-color) !important;
+}
+
+.badge-role-admin {
+    font-size: 0.62rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #1e1e24, #495057);
+    color: var(--warning-color);
+    padding: 2px 5px;
+    border-radius: 4px;
+    margin-left: 2px;
+}
+
+.locked-btn {
+    opacity: 0.65;
+    cursor: not-allowed !important;
+}
+
 /* User Profile Widget */
 .user-profile-widget {
     display: flex;

@@ -84,7 +84,7 @@ export default function App() {
         onLogout={handleLogout}
       />
 
-      <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Navigation activeTab={activeTab} setActiveTab={setActiveTab} user={user} showToast={showToast} />
 
       <main class="app-main">
         {activeTab === 'tab-writer' && <WriterTab showToast={showToast} />}
@@ -92,7 +92,7 @@ export default function App() {
         {activeTab === 'tab-references' && <ReferencesTab showToast={showToast} />}
         {activeTab === 'tab-charts' && <ChartsTab showToast={showToast} />}
         {activeTab === 'tab-slides' && <SlidesTab showToast={showToast} />}
-        {activeTab === 'tab-admin' && <AdminDashboard showToast={showToast} />}
+        {activeTab === 'tab-admin' && <AdminDashboard user={user} showToast={showToast} />}
       </main>
 
       <AuthModal 

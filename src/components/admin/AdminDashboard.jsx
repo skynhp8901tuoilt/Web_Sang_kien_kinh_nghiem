@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
 
-export default function AdminDashboard({ showToast }) {
+export default function AdminDashboard({ user, showToast }) {
   const [activeAdminSubTab, setActiveAdminSubTab] = useState('users');
+  const isAdminUser = user?.email === 'skynhp8901@gmail.com' || user?.username === 'skynhp8901';
+
+  if (!isAdminUser) {
+    return (
+      <div class="card-box text-center" style={{ padding: '3rem 1.5rem', textAlign: 'center' }}>
+        <i class="fa-solid fa-user-lock text-danger" style={{ fontSize: '3.5rem', marginBottom: '1rem' }}></i>
+        <h2 style={{ color: '#e03131', fontWeight: 800 }}>TỪ CHỐI TRUY CẬP (ACCESS DENIED)</h2>
+        <p class="margin-top-sm" style={{ color: '#495057', fontSize: '1rem' }}>
+          Khu vực này được thắt chặt bảo mật. Chỉ duy nhất tài khoản Quản trị viên cá nhân <strong>skynhp8901@gmail.com</strong> mới có quyền truy cập!
+        </p>
+      </div>
+    );
+  }
 
   // Simulated Users Data
   const [users, setUsers] = useState([

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function Navigation({ activeTab, setActiveTab, user, showToast }) {
-  const isAdminUser = user?.email === 'nguyenthanhduocathy@gmail.com' || user?.username === 'nguyenthanhduocathy' || user?.email === 'skynhp8901@gmail.com' || user?.username === 'skynhp8901';
+  const isAdminUser = user?.email === 'skynhp8901@gmail.com' || user?.username === 'skynhp8901';
 
   const tabs = [
     { id: 'tab-writer', icon: 'fa-wand-magic-sparkles', label: 'AI Viết SKKN' },
@@ -14,7 +14,7 @@ export default function Navigation({ activeTab, setActiveTab, user, showToast })
 
   const handleTabClick = (t) => {
     if (t.id === 'tab-admin' && !isAdminUser) {
-      showToast('Từ chối truy cập! Chỉ tài khoản Quản trị viên (nguyenthanhduocathy@gmail.com) mới có quyền vào trang Admin!', 'info');
+      showToast('Từ chối truy cập! Chỉ duy nhất tài khoản Quản trị viên cá nhân (skynhp8901@gmail.com) mới có quyền vào trang Admin!', 'info');
       return;
     }
     setActiveTab(t.id);
@@ -30,7 +30,7 @@ export default function Navigation({ activeTab, setActiveTab, user, showToast })
             type="button"
             class={`nav-btn ${activeTab === t.id ? 'active' : ''} ${t.isAdmin ? 'admin-nav-btn' : ''} ${isLocked ? 'locked-btn' : ''}`}
             onClick={() => handleTabClick(t)}
-            title={isLocked ? 'Chỉ dành riêng cho nguyenthanhduocathy@gmail.com' : t.label}
+            title={isLocked ? 'Chỉ dành riêng cho skynhp8901@gmail.com' : t.label}
           >
             <i class={`fa-solid ${isLocked ? 'fa-lock' : t.icon}`}></i> {t.label}
             {t.isAdmin && isAdminUser && <span class="badge-role-admin">MASTER</span>}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 export default function AdminDashboard({ user, showToast }) {
   const [activeAdminSubTab, setActiveAdminSubTab] = useState('users');
-  const isAdminUser = user?.email === 'nguyenthanhduocathy@gmail.com' || user?.username === 'nguyenthanhduocathy' || user?.email === 'skynhp8901@gmail.com' || user?.username === 'skynhp8901';
+  const isAdminUser = user?.email === 'skynhp8901@gmail.com' || user?.username === 'skynhp8901';
 
   if (!isAdminUser) {
     return (
@@ -10,7 +10,7 @@ export default function AdminDashboard({ user, showToast }) {
         <i class="fa-solid fa-user-lock text-danger" style={{ fontSize: '3.5rem', marginBottom: '1rem' }}></i>
         <h2 style={{ color: '#e03131', fontWeight: 800 }}>TỪ CHỐI TRUY CẬP (ACCESS DENIED)</h2>
         <p class="margin-top-sm" style={{ color: '#495057', fontSize: '1rem' }}>
-          Khu vực này được thắt chặt bảo mật. Chỉ tài khoản Quản trị viên cá nhân <strong>nguyenthanhduocathy@gmail.com</strong> mới có quyền truy cập!
+          Khu vực này được thắt chặt bảo mật. Chỉ duy nhất tài khoản Quản trị viên cá nhân <strong>skynhp8901@gmail.com</strong> mới có quyền truy cập!
         </p>
       </div>
     );
@@ -18,8 +18,7 @@ export default function AdminDashboard({ user, showToast }) {
 
   // Simulated Users Data
   const [users, setUsers] = useState([
-    { id: 'usr-0', username: 'nguyenthanhduocathy', email: 'nguyenthanhduocathy@gmail.com', fullname: 'Quản trị viên Nguyễn Thành Được', school: 'Sở GD&ĐT', role: 'ROLE_ADMIN', status: 'ACTIVE', lastLogin: '08/08/2026 22:30:00' },
-    { id: 'usr-1', username: 'skynhp8901', email: 'skynhp8901@gmail.com', fullname: 'Cô Nguyễn Thị Phương Thảo', school: 'Trường Mầm non Hoa Sen', role: 'ROLE_ADMIN', status: 'ACTIVE', lastLogin: '08/08/2026 22:15:30' },
+    { id: 'usr-1', username: 'skynhp8901', email: 'skynhp8901@gmail.com', fullname: 'Quản trị viên skynhp8901', school: 'Trường Mầm non Hoa Sen', role: 'ROLE_ADMIN', status: 'ACTIVE', lastLogin: '08/08/2026 22:30:00' },
     { id: 'usr-2', username: 'thao_nguyen', email: 'thao.nguyen@gmail.com', fullname: 'Cô Phạm Thị Thanh Thảo', school: 'Trường Mầm non Ánh Dương', role: 'ROLE_TEACHER', status: 'ACTIVE', lastLogin: '08/08/2026 19:40:12' },
     { id: 'usr-3', username: 'phuong_mai', email: 'phuongmai.nursery@edu.vn', fullname: 'Cô Trần Phương Mai', school: 'Trường Mầm non Sao Mai', role: 'ROLE_EXPERT_REVIEWER', status: 'ACTIVE', lastLogin: '07/08/2026 14:22:05' }
   ]);

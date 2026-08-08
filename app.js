@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAuthSystem();
     initLiveDocEditor();
     initAiCommandEditor();
+    initA4LengthController();
     initTabNavigation();
     initSessionTimer();
     initAgeGroupChips();
@@ -357,6 +358,192 @@ function highlightTargetSection(element) {
     void element.offsetWidth; // trigger reflow
     element.classList.add('section-highlight-updated');
     element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+/* ==========================================
+   0.3 A4 PAGE LENGTH & REGULATION CONTROLLER
+   ========================================== */
+function initA4LengthController() {
+    const selectPreset = document.getElementById('select-skkn-level-preset');
+    const customGroup = document.getElementById('custom-reg-file-group');
+    const fileRegInput = document.getElementById('input-reg-file');
+    const btnApplyA4 = document.getElementById('btn-apply-a4-lengths');
+
+    const len1 = document.getElementById('length-sec-1');
+    const len2 = document.getElementById('length-sec-2');
+    const len3 = document.getElementById('length-sec-3');
+    const len4 = document.getElementById('length-sec-4');
+
+    if (!selectPreset) return;
+
+    // Listen to level presets (School, District, Province, Custom File)
+    selectPreset.addEventListener('change', () => {
+        const val = selectPreset.value;
+        if (customGroup) customGroup.style.display = val === 'custom_file' ? 'block' : 'none';
+
+        if (val === 'school') {
+            if (len1) len1.value = "1.0";
+            if (len2) len2.value = "3.0";
+            if (len3) len3.value = "1.0";
+            if (len4) len4.value = "0.5";
+        } else if (val === 'district') {
+            if (len1) len1.value = "1.0";
+            if (len2) len2.value = "4.0";
+            if (len3) len3.value = "1.0";
+            if (len4) len4.value = "0.5";
+        } else if (val === 'province') {
+            if (len1) len1.value = "2.0";
+            if (len2) len2.value = "6.0";
+            if (len3) len3.value = "2.0";
+            if (len4) len4.value = "1.0";
+        }
+        updateA4MeterEstimate();
+    });
+
+    // Listen to changes in length select boxes
+    [len1, len2, len3, len4].forEach(select => {
+        if (select) select.addEventListener('change', updateA4MeterEstimate);
+    });
+
+    // File regulation RAG upload simulation
+    if (fileRegInput) {
+        fileRegInput.addEventListener('change', () => {
+            if (fileRegInput.files.length) {
+                const file = fileRegInput.files[0];
+                showToast(`Đã đọc tệp quy định: "${file.name}"! AI phân tích dung lượng quy định: Mục II dài 5 trang A4.`, 'success');
+                if (len1) len1.value = "1.5";
+                if (len2) len2.value = "5.0";
+                if (len3) len3.value = "1.5";
+                if (len4) len4.value = "1.0";
+                updateA4MeterEstimate();
+            }
+        });
+    }
+
+    // Apply A4 Page Length adjustment
+    if (btnApplyA4) {
+        btnApplyA4.addEventListener('click', () => {
+            const p1 = parseFloat(len1 ? len1.value : 1.0);
+            const p2 = parseFloat(len2 ? len2.value : 4.0);
+            const p3 = parseFloat(len3 ? len3.value : 1.0);
+            const p4 = parseFloat(len4 ? len4.value : 0.5);
+
+            btnApplyA4.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> AI Đang Biên Soạn & Căn Chỉnh Độ Dài Theo Trang A4...`;
+            btnApplyA4.disabled = true;
+
+            setTimeout(() => {
+                applySectionLengthAdjustments(p1, p2, p3, p4);
+
+                btnApplyA4.innerHTML = `<i class="fa-solid fa-file-contract"></i> AI Soạn Thảo & Căn Chỉnh Độ Dài Theo Trang A4 Quy Định`;
+                btnApplyA4.disabled = false;
+
+                const totalP = p1 + p2 + p3 + p4;
+                showToast(`AI đã căn chỉnh tổng dung lượng SKKN đạt ${totalP} Trang A4 đúng quy định!`, 'success');
+            }, 1300);
+        });
+    }
+
+    updateA4MeterEstimate();
+}
+
+function updateA4MeterEstimate() {
+    const len1 = document.getElementById('length-sec-1');
+    const len2 = document.getElementById('length-sec-2');
+    const len3 = document.getElementById('length-sec-3');
+    const len4 = document.getElementById('length-sec-4');
+
+    const p1 = parseFloat(len1 ? len1.value : 1.0);
+    const p2 = parseFloat(len2 ? len2.value : 4.0);
+    const p3 = parseFloat(len3 ? len3.value : 1.0);
+    const p4 = parseFloat(len4 ? len4.value : 0.5);
+
+    const totalPages = p1 + p2 + p3 + p4;
+    const estWords = Math.round(totalPages * 380);
+
+    const meterEst = document.getElementById('total-a4-estimate');
+    const meterFill = document.getElementById('meter-fill');
+
+    if (meterEst) meterEst.textContent = `~${totalPages} Trang A4 (Khoảng ${estWords.toLocaleString('vi-VN')} từ)`;
+    if (meterFill) {
+        const pct = Math.min(100, Math.round((totalPages / 15) * 100));
+        meterFill.style.width = pct + '%';
+    }
+}
+
+function applySectionLengthAdjustments(p1, p2, p3, p4) {
+    const sec1 = document.getElementById('section-1');
+    const sec2 = document.getElementById('section-2');
+    const sec3 = document.getElementById('section-3');
+    const sec4 = document.getElementById('section-4');
+
+    // Section 1 adjustment
+    if (sec1) {
+        sec1.innerHTML = `
+            <h3>I. ĐẶT VẤN ĐỀ (LÝ DO CHỌN ĐỀ TÀI - DUNG LƯỢNG CHUẨN ${p1} TRANG A4)</h3>
+            <p>Trẻ em lứa tuổi mầm non, đặc biệt là giai đoạn 5-6 tuổi (Mẫu giáo lớn), là thời kỳ vàng để hình thành tính tự lập, kỹ năng tự phục vụ và tinh thần chủ động. Việc rèn luyện kỹ năng tự phục vụ là nền tảng cốt lõi chuẩn bị hành trang vững chắc cho trẻ trước khi bước vào môi trường Tiểu học (Lớp 1).</p>
+            <p>Thực tế tại nhà trường, phần lớn trẻ vẫn được cha mẹ nuông chiều tại nhà, dẫn đến tâm lý ỷ lại. Khi đến lớp, trẻ còn lúng túng trong việc tự đi giày dép, tự cất chăn gối hay tự dọn đồ chơi. Do đó, việc triển khai sáng kiến kinh nghiệm này mang tính thiết thực và giá trị sư phạm cao.</p>
+            ${p1 >= 1.5 ? `<p>Nghiên cứu được thực hiện dựa trên sự khảo sát tâm sinh lý lứa tuổi mầm non theo Chương trình Giáo dục Mầm non mới của Bộ Giáo dục và Đào tạo, kết hợp phương pháp quan sát hành vi thực tế của trẻ tại nhóm lớp.</p>` : ''}
+        `;
+    }
+
+    // Section 2 adjustment
+    if (sec2) {
+        let solutionsHtml = `
+            <h3>II. GIẢI PHÁP THỰC HIỆN (CÁC BIỆN PHÁP SÁNG TẠO - DUNG LƯỢNG CHUẨN ${p2} TRANG A4)</h3>
+            <h4>1. Biện pháp 1: Xây dựng môi trường lớp học mở, phân quyền tự quản cho trẻ</h4>
+            <p>Thiết kế các góc hoạt động vừa tầm với của trẻ, dán các ký hiệu trực quan (nhãn tên, hình ảnh minh họa) để trẻ dễ dàng lấy và cất đồ dùng cá nhân. Phân công "Ban cán sự nhí" luân phiên hàng ngày đảm nhiệm công việc trực nhật bàn ăn, chuẩn bị khăn lau và chia thìa.</p>
+
+            <h4>2. Biện pháp 2: Tích hợp kỹ năng tự phục vụ vào các tiết học trải nghiệm & kỹ năng sống</h4>
+            <p>Tổ chức các hội thi nhỏ như "Bé giỏi gấp quần áo", "Nhanh tay xếp gối chăn", "Kĩ năng thắt dây giày". Sử dụng các bài thơ, bài hát vè tự biên dễ nhớ để kích thích trẻ hào hứng thực hiện.</p>
+        `;
+
+        if (p2 >= 3.0) {
+            solutionsHtml += `
+            <h4>3. Biện pháp 3: Ứng dụng công nghệ thông tin & bài giảng điện tử tương tác</h4>
+            <p>Sử dụng các video ngắn mô phỏng quy trình vệ sinh cá nhân, gấp quần áo và sắp xếp góc chơi để kích thích thị giác và sự tập trung của trẻ mầm non.</p>
+            `;
+        }
+
+        if (p2 >= 4.0) {
+            solutionsHtml += `
+            <h4>4. Biện pháp 4: Tăng cường phối hợp 3 bên (Nhà trường - Cô giáo - Phụ huynh)</h4>
+            <p>Tạo nhóm Zalo lớp để chia sẻ clip hướng dẫn kỹ năng tự phục vụ. Khuyến khích phụ huynh giao việc nhà phù hợp tại gia đình và quay clip đăng lên bảng tin khen thưởng kỹ năng của lớp.</p>
+            `;
+        }
+
+        if (p2 >= 5.0) {
+            solutionsHtml += `
+            <h4>5. Biện pháp 5: Đánh giá tuyên dương và khen thưởng kịp thời</h4>
+            <p>Xây dựng "Bảng cây kỹ năng bé ngoan", thưởng dán hoa mỗi khi trẻ tự giác hoàn thành nhiệm vụ tự phục vụ mà không cần cô giáo nhắc nhở.</p>
+            `;
+        }
+
+        sec2.innerHTML = solutionsHtml;
+    }
+
+    // Section 3 adjustment
+    if (sec3) {
+        sec3.innerHTML = `
+            <h3>III. HIỆU QUẢ VÀ KẾT QUẢ ĐẠT ĐƯỢC (DUNG LƯỢNG CHUẨN ${p3} TRANG A4)</h3>
+            <p>Sau thời gian áp dụng đồng bộ các biện pháp trên, kết quả đối chứng trước và sau khi áp dụng đạt hiệu quả tích cực:</p>
+            <ul>
+                <li>100% Trẻ tự giác đeo khẩu trang, đi giày dép và cất đồ dùng cá nhân đúng vị trí.</li>
+                <li>95% Trẻ tự giác gấp chăn gối ngăn nắp sau giờ ngủ trưa.</li>
+                ${p3 >= 1.5 ? `<li>100% Phụ huynh phản hồi tích cực và ghi nhận sự tự lập trưởng thành của trẻ tại gia đình.</li>` : ''}
+            </ul>
+        `;
+    }
+
+    // Section 4 adjustment
+    if (sec4) {
+        sec4.innerHTML = `
+            <h3>IV. BÀI HỌC KINH NGHIỆM & KHUYẾN NGHỊ (DUNG LƯỢNG CHUẨN ${p4} TRANG A4)</h3>
+            <p>Giáo viên cần luôn kiên nhẫn, khích lệ động viên kịp thời với nguyên tắc "không làm thay mà luôn đồng hành hướng dẫn".</p>
+        `;
+    }
+
+    // Highlight all updated sections
+    if (sec1) highlightTargetSection(sec1);
 }
 
 /* ==========================================

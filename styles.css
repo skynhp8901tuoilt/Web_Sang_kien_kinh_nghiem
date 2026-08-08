@@ -1518,3 +1518,89 @@ body {
     100% { background: #e6fcf5; transform: scale(1); }
 }
 
+/* A4 Page Length & Regulation Controller Styling */
+.a4-config-panel {
+    background: linear-gradient(135deg, #e6fcf5, #edf2ff);
+    border: 1px solid #96f2d7;
+    margin-bottom: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 4px 16px rgba(12, 166, 120, 0.08);
+}
+
+.a4-preset-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.flex-1 { flex: 1; }
+
+.a4-grid-controls {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+}
+
+.a4-col-card {
+    background: white;
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.a4-col-card label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #495057;
+    margin-bottom: 0.35rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    white-space: nowrap;
+}
+
+.form-control.compact {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+}
+
+.page-meter-bar {
+    background: white;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid #bac8ff;
+}
+
+.meter-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+    margin-bottom: 0.5rem;
+}
+
+.meter-info span {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.meter-info strong {
+    color: var(--accent-color);
+    font-size: 0.88rem;
+}
+
+.meter-progress-track {
+    width: 100%;
+    height: 8px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.meter-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+}
+

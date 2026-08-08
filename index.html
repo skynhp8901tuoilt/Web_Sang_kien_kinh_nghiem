@@ -227,6 +227,87 @@
                         </button>
                     </div>
 
+                    <!-- Bảng Cấu Hình Độ Dài Từng Mục Theo Trang A4 & Thể Thức Quy Định -->
+                    <div class="card-box a4-config-panel" id="a4-length-config-panel">
+                        <div class="meta-box-header">
+                            <h4><i class="fa-solid fa-file-lines"></i> AI Căn Chỉnh Độ Dài Từng Mục Theo Trang A4 & Quy Định Đính Kèm</h4>
+                            <span class="badge-tag success">Chuẩn Thể Thức NĐ 30/2020/NĐ-CP</span>
+                        </div>
+
+                        <div class="a4-preset-row">
+                            <div class="form-group flex-1">
+                                <label for="select-skkn-level-preset"><i class="fa-solid fa-award"></i> Chọn Mẫu Quy Định Cấp Thẩm Định SKKN:</label>
+                                <select id="select-skkn-level-preset" class="form-control">
+                                    <option value="district" selected>Quy định Cấp Huyện / Quận (Tổng 8 - 12 trang A4)</option>
+                                    <option value="school">Quy định Cấp Trường Mầm non (Tổng 5 - 8 trang A4)</option>
+                                    <option value="province">Quy định Cấp Tỉnh / Thành phố (Tổng 15 - 20 trang A4)</option>
+                                    <option value="custom_file">Đọc quy định từ File đính kèm (.PDF, .DOCX)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group flex-1" id="custom-reg-file-group" style="display: none;">
+                                <label for="input-reg-file"><i class="fa-solid fa-paperclip"></i> Tải File Quy Định Độ Dài (.PDF / .DOCX):</label>
+                                <input type="file" id="input-reg-file" class="form-control" accept=".pdf,.docx,.txt">
+                            </div>
+                        </div>
+
+                        <div class="a4-grid-controls margin-top-sm">
+                            <div class="a4-col-card">
+                                <label><i class="fa-solid fa-bookmark"></i> Mục I (Đặt vấn đề):</label>
+                                <select id="length-sec-1" class="form-control compact">
+                                    <option value="0.5">0.5 Trang A4 (~200 từ)</option>
+                                    <option value="1.0" selected>1 Trang A4 (~380 từ)</option>
+                                    <option value="1.5">1.5 Trang A4 (~580 từ)</option>
+                                    <option value="2.0">2 Trang A4 (~760 từ)</option>
+                                </select>
+                            </div>
+
+                            <div class="a4-col-card">
+                                <label><i class="fa-solid fa-lightbulb"></i> Mục II (Các giải pháp):</label>
+                                <select id="length-sec-2" class="form-control compact">
+                                    <option value="2.0">2 Trang A4 (~760 từ)</option>
+                                    <option value="3.0">3 Trang A4 (~1,150 từ)</option>
+                                    <option value="4.0" selected>4 Trang A4 (~1,520 từ)</option>
+                                    <option value="5.0">5 Trang A4 (~1,900 từ)</option>
+                                    <option value="6.0">6 Trang A4 (~2,280 từ)</option>
+                                </select>
+                            </div>
+
+                            <div class="a4-col-card">
+                                <label><i class="fa-solid fa-chart-column"></i> Mục III (Hiệu quả):</label>
+                                <select id="length-sec-3" class="form-control compact">
+                                    <option value="0.5">0.5 Trang A4 (~200 từ)</option>
+                                    <option value="1.0" selected>1 Trang A4 (~380 từ)</option>
+                                    <option value="1.5">1.5 Trang A4 (~580 từ)</option>
+                                    <option value="2.0">2 Trang A4 (~760 từ)</option>
+                                </select>
+                            </div>
+
+                            <div class="a4-col-card">
+                                <label><i class="fa-solid fa-graduation-cap"></i> Mục IV (Bài học KNG):</label>
+                                <select id="length-sec-4" class="form-control compact">
+                                    <option value="0.5" selected>0.5 Trang A4 (~200 từ)</option>
+                                    <option value="1.0">1 Trang A4 (~380 từ)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Meter Status Bar -->
+                        <div class="page-meter-bar margin-top-sm">
+                            <div class="meter-info">
+                                <span><i class="fa-solid fa-calculator"></i> Ước Tính Tổng Dung Lượng Bản Thảo:</span>
+                                <strong id="total-a4-estimate">~6.5 Trang A4 (Khoảng 2,480 từ)</strong>
+                            </div>
+                            <div class="meter-progress-track">
+                                <div class="meter-progress-fill" id="meter-fill" style="width: 65%;"></div>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary full-width margin-top" id="btn-apply-a4-lengths">
+                            <i class="fa-solid fa-file-contract"></i> AI Soạn Thảo & Căn Chỉnh Độ Dài Theo Trang A4 Quy Định
+                        </button>
+                    </div>
+
                     <div class="editor-content-card" id="skkn-content-area">
                         <!-- Floating Toolbar For Rich Text Editing -->
                         <div class="formatting-toolbar" id="formatting-toolbar">

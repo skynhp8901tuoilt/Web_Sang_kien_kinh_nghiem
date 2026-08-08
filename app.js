@@ -34,9 +34,10 @@ function initSupabaseIntegration() {
     const urlInput = document.getElementById('supabase-url-input');
     const keyInput = document.getElementById('supabase-key-input');
 
-    // Load saved Supabase credentials
-    const savedUrl = localStorage.getItem('supabase_url') || '';
-    const savedKey = localStorage.getItem('supabase_key') || '';
+    // Load saved Supabase credentials or fallback to window.SUPABASE_CONFIG
+    const defaultConfig = window.SUPABASE_CONFIG || { URL: '', ANON_KEY: '' };
+    const savedUrl = localStorage.getItem('supabase_url') || defaultConfig.URL;
+    const savedKey = localStorage.getItem('supabase_key') || defaultConfig.ANON_KEY;
 
     if (urlInput) urlInput.value = savedUrl;
     if (keyInput) keyInput.value = savedKey;
@@ -44,7 +45,7 @@ function initSupabaseIntegration() {
     if (savedUrl && savedKey && window.supabase) {
         try {
             window.supabaseClient = window.supabase.createClient(savedUrl, savedKey);
-            console.log('✅ Supabase Client initialized successfully!');
+            console.log('✅ Supabase Live Project Connected: https://smnbjhtttoshnbghilcs.supabase.co');
         } catch (err) {
             console.warn('⚠️ Supabase init warning:', err);
         }

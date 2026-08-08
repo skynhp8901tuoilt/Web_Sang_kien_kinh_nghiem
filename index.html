@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Chart.js for survey charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Supabase JS Client v2 SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -49,6 +51,7 @@
                         <span class="session-timer">(Online: <span id="session-counter">00:00:00</span>)</span>
                     </div>
                 </div>
+                <button class="btn-icon text-primary" id="btn-open-supabase-modal" title="Cấu hình kết nối Supabase DB"><i class="fa-solid fa-database"></i></button>
                 <button class="btn-icon" id="btn-user-history" title="Xem nhật ký đăng nhập"><i class="fa-solid fa-history"></i></button>
                 <button class="btn-icon text-danger" id="btn-logout" title="Đăng xuất / Đổi tài khoản cá nhân"><i class="fa-solid fa-right-from-bracket"></i></button>
             </div>
@@ -686,6 +689,42 @@
                     <i class="fa-solid fa-shield-halved"></i>
                     <p>Mỗi lượt đăng nhập sẽ tự động ghi nhận Mốc thời gian, IP và Thiết bị vào Nhật ký lịch sử để bảo vệ dữ liệu cá nhân của Thầy/Cô.</p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cấu Hình Kết Nối Supabase Database -->
+    <div class="modal-overlay" id="modal-supabase-config">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-database text-primary"></i> Cấu Hình Kết Nối Supabase Database</h3>
+                <button class="close-modal" id="btn-close-supabase-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="user-summary-box">
+                    <p><i class="fa-solid fa-circle-info"></i> <strong>Hướng dẫn:</strong> Dán thông tin <strong>SUPABASE_URL</strong> và <strong>SUPABASE_ANON_KEY</strong> từ tài khoản Supabase của Thầy/Cô (Truy cập: <i>Project Settings $\rightarrow$ API</i>) để đồng bộ dữ liệu đám mây thực tế.</p>
+                </div>
+
+                <form id="form-supabase-config" onsubmit="event.preventDefault();">
+                    <div class="form-group">
+                        <label for="supabase-url-input"><i class="fa-solid fa-link"></i> Supabase Project URL:</label>
+                        <input type="text" id="supabase-url-input" class="form-control" placeholder="https://xyzcompany.supabase.co">
+                    </div>
+
+                    <div class="form-group margin-top-sm">
+                        <label for="supabase-key-input"><i class="fa-solid fa-key"></i> Supabase Anon Public Key:</label>
+                        <textarea id="supabase-key-input" class="form-control text-area" rows="3" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."></textarea>
+                    </div>
+
+                    <div class="button-row margin-top">
+                        <button type="button" class="btn-primary" id="btn-save-supabase-config">
+                            <i class="fa-solid fa-plug"></i> Lưu & Kết Nối Supabase DB
+                        </button>
+                        <button type="button" class="btn-outline" id="btn-test-supabase-conn">
+                            <i class="fa-solid fa-vial"></i> Kiểm Tra Kết Nối
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

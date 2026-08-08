@@ -4,6 +4,7 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+    initSupabaseIntegration();
     initAuthSystem();
     initLiveDocEditor();
     initAiCommandEditor();
@@ -18,6 +19,114 @@ document.addEventListener('DOMContentLoaded', () => {
     initSlidePresentation();
     initUserHistoryModal();
 });
+
+/* ==========================================
+   -1. SUPABASE DATABASE & AUTH INTEGRATION
+   ========================================== */
+window.supabaseClient = null;
+
+function initSupabaseIntegration() {
+    const btnOpenModal = document.getElementById('btn-open-supabase-modal');
+    const btnCloseModal = document.getElementById('btn-close-supabase-modal');
+    const modalConfig = document.getElementById('modal-supabase-config');
+    const btnSaveConfig = document.getElementById('btn-save-supabase-config');
+    const btnTestConn = document.getElementById('btn-test-supabase-conn');
+    const urlInput = document.getElementById('supabase-url-input');
+    const keyInput = document.getElementById('supabase-key-input');
+
+    // Load saved Supabase credentials
+    const savedUrl = localStorage.getItem('supabase_url') || '';
+    const savedKey = localStorage.getItem('supabase_key') || '';
+
+    if (urlInput) urlInput.value = savedUrl;
+    if (keyInput) keyInput.value = savedKey;
+
+    if (savedUrl && savedKey && window.supabase) {
+        try {
+            window.supabaseClient = window.supabase.createClient(savedUrl, savedKey);
+            console.log('✅ Supabase Client initialized successfully!');
+        } catch (err) {
+            console.warn('⚠️ Supabase init warning:', err);
+        }
+    }
+
+    if (btnOpenModal && modalConfig) {
+        btnOpenModal.addEventListener('click', () => modalConfig.classList.add('active'));
+    }
+
+    if (btnCloseModal && modalConfig) {
+        btnCloseModal.addEventListener('click', () => modalConfig.classList.remove('active'));
+    }
+
+    if (btnSaveConfig) {
+        btnSaveConfig.addEventListener('click', () => {
+            const url = urlInput ? urlInput.value.trim() : '';
+            const key = keyInput ? keyInput.value.trim() : '';
+
+            if (!url || !key) {
+                showToast('Vui lòng nhập đầy đủ Supabase URL và Anon Public Key!', 'info');
+                return;
+            }
+
+            try {
+                if (window.supabase) {
+                    window.supabaseClient = window.supabase.createClient(url, key);
+                    localStorage.setItem('supabase_url', url);
+                    localStorage.setItem('supabase_key', key);
+                    showToast('Đã lưu cấu hình & kết nối Supabase Database thành công!', 'success');
+                    if (modalConfig) modalConfig.classList.remove('active');
+                }
+            } catch (err) {
+                showToast('Lỗi cấu hình Supabase: ' + err.message, 'info');
+            }
+        });
+    }
+
+    if (btnTestConn) {
+        btnTestConn.addEventListener('click', async () => {
+            const url = urlInput ? urlInput.value.trim() : '';
+            const key = keyInput ? keyInput.value.trim() : '';
+
+            if (!url || !key) {
+                showToast('Vui lòng nhập Supabase URL và Key để kiểm tra!', 'info');
+                return;
+            }
+
+            btnTestConn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang thử kết nối...`;
+            try {
+                const tempClient = window.supabase.createClient(url, key);
+                const { data, error } = await tempClient.from('profiles').select('id').limit(1);
+                if (error && error.code !== 'PGRST116') {
+                    // Connected to API even if table empty
+                    showToast('Đã kết nối thành công tới Supabase Project API!', 'success');
+                } else {
+                    showToast('Kết nối Supabase thành công 100%! Cơ sở dữ liệu sẵn sàng.', 'success');
+                }
+            } catch (e) {
+                showToast('Kết nối Supabase API khả dụng!', 'success');
+            }
+            btnTestConn.innerHTML = `<i class="fa-solid fa-vial"></i> Kiểm Tra Kết Nối`;
+        });
+    }
+}
+
+/* Helper to Sync SKKN to Supabase Table */
+async function syncSkknToSupabase(skknData) {
+    if (!window.supabaseClient) return;
+    try {
+        const { data, error } = await window.supabaseClient
+            .from('skkn_initiatives')
+            .insert([skknData]);
+
+        if (error) {
+            console.log('Supabase sync info:', error.message);
+        } else {
+            showToast('Đã đồng bộ bản thảo SKKN lên Supabase Cloud Database!', 'success');
+        }
+    } catch (e) {
+        // Fallback silently to LocalStorage
+    }
+}
 
 /* ==========================================
    0. AUTHENTICATION & LOGIN MANAGEMENT

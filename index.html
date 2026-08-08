@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MầmNonSKKN AI - Hệ thống Trợ lý Soạn thảo & Thẩm định Sáng kiến Kinh nghiệm Mầm non</title>
+    <meta name="description" content="Nền tảng AI hỗ trợ Giáo viên Mầm non viết Sáng kiến kinh nghiệm theo độ tuổi, kiểm tra đạo văn, tạo slide thuyết trình và biểu đồ tự động.">
+    <!-- Google Fonts: Be Vietnam Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js for survey charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Top Bar Header -->
+    <header class="top-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <div class="logo-icon"><i class="fa-solid fa-shapes"></i></div>
+                <div class="logo-text">
+                    <span class="brand-name">MầmNon<span class="highlight">SKKN AI</span></span>
+                    <span class="brand-sub">Trợ Lý Sáng Kiến Kinh Nghiệm Mầm Non 4.0</span>
+                </div>
+            </div>
+
+            <!-- Main Navigation -->
+            <nav class="main-nav">
+                <button class="nav-btn active" data-tab="tab-writer"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Viết SKKN</button>
+                <button class="nav-btn" data-tab="tab-plagiarism"><i class="fa-solid fa-shield-halved"></i> Kiểm Trùng Lặp</button>
+                <button class="nav-btn" data-tab="tab-references"><i class="fa-solid fa-folder-open"></i> Đưa Tài Liệu Lên</button>
+                <button class="nav-btn" data-tab="tab-charts"><i class="fa-solid fa-chart-pie"></i> Biểu Đồ & Ảnh</button>
+                <button class="nav-btn" data-tab="tab-slides"><i class="fa-solid fa-file-powerpoint"></i> Slide Thuyết Trình</button>
+            </nav>
+
+            <!-- User Auth Profile Widget -->
+            <div class="user-profile-widget" id="user-widget">
+                <div class="user-avatar">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=TeacherNguyen" alt="Giáo viên Mầm non">
+                    <span class="status-dot"></span>
+                </div>
+                <div class="user-info">
+                    <div class="user-name">Cô Nguyễn Thị Phương Thảo <span class="badge-role">Giáo viên Khối MG Lớn</span></div>
+                    <div class="user-login-time">
+                        <i class="fa-regular fa-clock"></i> Đăng nhập: <strong id="login-timestamp">08/08/2026 09:19:49</strong> 
+                        <span class="session-timer">(Online: <span id="session-counter">00:00:00</span>)</span>
+                    </div>
+                </div>
+                <button class="btn-icon" id="btn-user-history" title="Xem nhật ký đăng nhập"><i class="fa-solid fa-history"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="app-main">
+
+        <!-- TAB 1: AI VIẾT SKKN THEO ĐỘ TUỔI -->
+        <section class="tab-panel active" id="tab-writer">
+            <div class="panel-layout">
+                <!-- Sidebar Parameters & Age Group Selector -->
+                <aside class="config-sidebar">
+                    <div class="card-box">
+                        <h3 class="box-title"><i class="fa-solid fa-child"></i> 1. Chọn Nhóm Độ Tuổi Mầm Non</h3>
+                        <p class="box-desc">Chuẩn Phân Phối Chương Trình Khối Mầm Non (Bộ GD&ĐT)</p>
+                        
+                        <div class="age-category-group">
+                            <div class="category-label"><i class="fa-solid fa-baby"></i> Khối Nhà Trẻ (3 - 36 tháng)</div>
+                            <div class="age-grid">
+                                <label class="age-chip">
+                                    <input type="radio" name="age-group" value="nha_tre_3_12m">
+                                    <span class="chip-content">
+                                        <strong>Nhà trẻ 3-12 tháng</strong>
+                                        <small>Thói quen sinh hoạt & Vận động</small>
+                                    </span>
+                                </label>
+                                <label class="age-chip">
+                                    <input type="radio" name="age-group" value="nha_tre_12_24m">
+                                    <span class="chip-content">
+                                        <strong>Nhà trẻ 12-24 tháng</strong>
+                                        <small>Tập nói & Nhận biết các vật</small>
+                                    </span>
+                                </label>
+                                <label class="age-chip">
+                                    <input type="radio" name="age-group" value="nha_tre_24_36m">
+                                    <span class="chip-content">
+                                        <strong>Nhà trẻ 24-36 tháng</strong>
+                                        <small>Vận động tinh & Kỹ năng đầu đời</small>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="age-category-group">
+                            <div class="category-label"><i class="fa-solid fa-children"></i> Khối Mẫu Giáo (3 - 6 tuổi)</div>
+                            <div class="age-grid">
+                                <label class="age-chip">
+                                    <input type="radio" name="age-group" value="mau_giao_3_4t">
+                                    <span class="chip-content">
+                                        <strong>Mẫu giáo 3 - 4 tuổi</strong>
+                                        <small>Lớp Mẫu giáo Bé</small>
+                                    </span>
+                                </label>
+                                <label class="age-chip">
+                                    <input type="radio" name="age-group" value="mau_giao_4_5t">
+                                    <span class="chip-content">
+                                        <strong>Mẫu giáo 4 - 5 tuổi</strong>
+                                        <small>Lớp Mẫu giáo Nhỡ</small>
+                                    </span>
+                                </label>
+                                <label class="age-chip checked">
+                                    <input type="radio" name="age-group" value="mau_giao_5_6t" checked>
+                                    <span class="chip-content">
+                                        <strong>Mẫu giáo 5 - 6 tuổi</strong>
+                                        <small>Lớp MG Lớn (Chuẩn bị vào Lớp 1)</small>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <h3 class="box-title margin-top"><i class="fa-solid fa-book-open-reader"></i> 2. Lĩnh Vực Phát Triển</h3>
+                        <select id="select-field" class="form-control">
+                            <option value="ngon_ngu">Lĩnh vực Phát triển Ngôn ngữ (Kể chuyện, Đọc thơ, Chữ cái)</option>
+                            <option value="nhan_thuc">Lĩnh vực Phát triển Nhận thức (Khám phá KH, Toán mầm non)</option>
+                            <option value="the_chat">Lĩnh vực Phát triển Thể chất (Vận động cơ bản, Trò chơi dân gian)</option>
+                            <option value="tham_my">Lĩnh vực Phát triển Thẩm mỹ (Tạo hình, Âm nhạc, Vẽ/Nặn/Xé dán)</option>
+                            <option value="tinh_cam_kns" selected>Lĩnh vực Phát triển Tình cảm & Kỹ năng xã hội</option>
+                        </select>
+
+                        <h3 class="box-title margin-top"><i class="fa-solid fa-lightbulb"></i> 3. Ý Tưởng Sáng Kiến Hoặc Đề Tài</h3>
+                        <textarea id="input-topic" class="form-control text-area" rows="3" placeholder="Ví dụ: Rèn luyện kỹ năng tự phục vụ cho trẻ 5-6 tuổi thông qua các hoạt động trải nghiệm thực tế tại trường mầm non..."></textarea>
+                        
+                        <div class="quick-topics">
+                            <small>Gợi ý đề tài HOT:</small>
+                            <button class="topic-tag" onclick="applyQuickTopic('Ứng dụng trò chơi dân gian nâng cao thể lực cho trẻ mẫu giáo nhỡ 4-5 tuổi')">Trò chơi dân gian (4-5T)</button>
+                            <button class="topic-tag" onclick="applyQuickTopic('Một số biện pháp giúp trẻ 5-6 tuổi tự tin giao tiếp & sẵn sàng tâm lý vào Lớp 1')">Tự tin vào Lớp 1 (5-6T)</button>
+                            <button class="topic-tag" onclick="applyQuickTopic('Biện pháp rèn kỹ năng tự phục vụ & vệ sinh cá nhân cho trẻ nhà trẻ 24-36 tháng')">Tự phục vụ (24-36M)</button>
+                        </div>
+
+                        <button class="btn-primary full-width margin-top-lg" id="btn-generate-skkn">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> AI Tự Động Viết SKKN Hoàn Chỉnh
+                        </button>
+                    </div>
+                </aside>
+
+                <!-- SKKN Editor & Document View Area -->
+                <main class="editor-workspace">
+                    <div class="workspace-header">
+                        <div class="doc-title-group">
+                            <span class="badge-status">Bản Thảo SKKN</span>
+                            <h2 id="doc-active-title">Sáng kiến kinh nghiệm: Rèn luyện kỹ năng tự phục vụ cho trẻ 5-6 tuổi</h2>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-outline" id="btn-export-word"><i class="fa-solid fa-file-word"></i> Xuất File Word</button>
+                            <button class="btn-outline" id="btn-send-to-plagiarism"><i class="fa-solid fa-magnifying-glass"></i> Kiểm Đạo Văn</button>
+                            <button class="btn-accent" id="btn-generate-slides-direct"><i class="fa-solid fa-desktop"></i> Tạo Slide Ngay</button>
+                        </div>
+                    </div>
+
+                    <div class="editor-content-card" id="skkn-content-area">
+                        <!-- Content will be rendered dynamically -->
+                        <div class="skkn-document-view">
+                            <div class="doc-header-formal">
+                                <p class="center bold">ỦY BÀN NHÂN DÂN QUẬN / HUYỆN NGHỆ AN</p>
+                                <p class="center bold">TRƯỜNG MẦM NON HOA SEN</p>
+                                <hr class="divider-short">
+                                <h1 class="skkn-main-heading">SÁNG KIẾN KINH NGHIỆM</h1>
+                                <h2 class="skkn-sub-heading" id="view-title">"Biện pháp rèn luyện kỹ năng tự phục vụ và tự lập cho trẻ 5-6 tuổi thông qua các hoạt động trải nghiệm tại trường Mầm non"</h2>
+                                <div class="author-meta">
+                                    <p><strong>Tác giả:</strong> Cô Nguyễn Thị Phương Thảo</p>
+                                    <p><strong>Chức vụ:</strong> Giáo viên Mầm non - Khối Mẫu giáo Lớn</p>
+                                    <p><strong>Đơn vị:</strong> Trường Mầm non Hoa Sen</p>
+                                    <p><strong>Lĩnh vực:</strong> Phát triển Tình cảm & Kỹ năng xã hội (MG 5-6 Tuổi)</p>
+                                </div>
+                            </div>
+
+                            <div class="skkn-body" id="skkn-body-text">
+                                <section class="skkn-section">
+                                    <h3>I. ĐẶT VẤN ĐỀ (LÝ DO CHỌN ĐỀ TÀI)</h3>
+                                    <p>Trẻ em lứa tuổi mầm non, đặc biệt là giai đoạn 5-6 tuổi (Mẫu giáo lớn), là thời kỳ vàng để hình thành tính tự lập, kỹ năng tự phục vụ và chủ động trong sinh hoạt hàng ngày. Đây là nền tảng cốt lõi giúp trẻ chuẩn bị tâm lý và kỹ năng vững vàng khi bước sang môi trường Tiểu học (Lớp 1).</p>
+                                    <p>Thực tế tại lớp Mẫu giáo Lớn A1 trường Mầm non Hoa Sen, phần lớn trẻ vẫn được cha mẹ nuông chiều tại nhà, dẫn đến tâm lý ỷ lại. Khi đến lớp, trẻ còn lúng túng trong việc tự đi giày dép, tự cất gối chăn sau giờ ngủ, tự rót nước uống hay tự dọn dẹp đồ chơi. Do đó, tôi đã lựa chọn đề tài <strong>"Biện pháp rèn luyện kỹ năng tự phục vụ cho trẻ 5-6 tuổi thông qua các hoạt động trải nghiệm thực tế"</strong> nhằm đưa ra giải pháp thiết thực áp dụng tại nhà trường.</p>
+                                </section>
+
+                                <section class="skkn-section">
+                                    <h3>II. GIẢI PHÁP THỰC HIỆN (CÁC BIỆN PHÁP SÁNG TẠO)</h3>
+                                    <h4>1. Biện pháp 1: Xây dựng môi trường lớp học theo hướng mở, phân quyền tự quản cho trẻ</h4>
+                                    <p>Thiết kế các góc hoạt động vừa tầm với của trẻ, dán các ký hiệu trực quan (nhãn tên, hình ảnh minh họa) để trẻ dễ dàng lấy và cất đồ dùng cá nhân. Phân công "Ban cán sự nhí" luân phiên hàng ngày đảm nhiệm công việc trực nhật bàn ăn, chuẩn bị khăn lau và chia thìa.</p>
+
+                                    <h4>2. Biện pháp 2: Tích hợp kỹ năng tự phục vụ vào các tiết học trải nghiệm & kỹ năng sống</h4>
+                                    <p>Tổ chức các hội thi nhỏ như "Bé giỏi gấp quần áo", "Nhanh tay xếp gối chăn", "Kĩ năng thắt dây giày". Sử dụng các bài thơ, bài hát vè tự biên dễ nhớ để kích thích trẻ hào hứng thực hiện.</p>
+
+                                    <h4>3. Biện pháp 3: Tăng cường phối hợp chặt chẽ giữa Nhà trường và Gia đình</h4>
+                                    <p>Gửi video hướng dẫn kỹ năng tự phục vụ lên nhóm Zalo của lớp. Khuyến khích phụ huynh giao việc nhà phù hợp cho trẻ (nhặt rau, xếp bát đĩa) và chụp ảnh/quay clip chia sẻ lên bảng tin khen thưởng của lớp.</p>
+                                </section>
+
+                                <section class="skkn-section">
+                                    <h3>III. HIỆU QUẢ VÀ KẾT QUẢ ĐẠT ĐƯỢC (KẾT QUẢ ĐỐI CHỨNG)</h3>
+                                    <p>Sau 6 tháng kiên trì triển khai các biện pháp trên tại lớp Mẫu giáo Lớn A1, kết quả thu được rất khả quan:</p>
+                                    <ul>
+                                        <li>100% trẻ có kỹ năng tự đeo khẩu trang, đi giày dép và cất đồ dùng đúng nơi quy định.</li>
+                                        <li>95% trẻ tự giác xếp chăn gối ngăn nắp sau giờ ngủ trưa mà không cần cô giáo nhắc nhở.</li>
+                                        <li>Phụ huynh phản hồi tích cực về sự trưởng thành và tính tự lập vượt bậc của con tại gia đình.</li>
+                                    </ul>
+                                </section>
+
+                                <section class="skkn-section">
+                                    <h3>IV. BÀI HỌC KINH NGHIỆM & KHUYẾN NGHỊ</h3>
+                                    <p>Giáo viên cần luôn kiên nhẫn, động viên khích lệ trẻ kịp thời, "không làm thay mà chỉ hướng dẫn". Cần tạo cho trẻ tâm lý vui vẻ, tôn trọng sự độc lập của trẻ.</p>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </section>
+
+        <!-- TAB 2: KIỂM TRA ĐẠO VĂN & TRÙNG LẶP -->
+        <section class="tab-panel" id="tab-plagiarism">
+            <div class="plagiarism-container">
+                <div class="plagiarism-header">
+                    <h2><i class="fa-solid fa-magnifying-glass-chart"></i> Hệ Thống Kiểm Tra Đạo Văn & Trùng Lặp SKKN Mầm Non</h2>
+                    <p>So sánh đối soát nội dung với Kho dữ liệu SKKN Giáo dục Mầm non Toàn quốc & Tài liệu tham khảo tải lên.</p>
+                </div>
+
+                <div class="plagiarism-grid">
+                    <!-- Text input / SKKN Content for check -->
+                    <div class="card-box">
+                        <h3>Nội dung SKKN Cần Kiểm Tra</h3>
+                        <textarea id="plagiarism-text-input" class="form-control text-area large" rows="12" placeholder="Dán nội dung SKKN hoặc chọn bản thảo vừa AI sáng tạo..."></textarea>
+                        <div class="button-row">
+                            <button class="btn-primary" id="btn-run-plagiarism-check"><i class="fa-solid fa-microchip"></i> Chạy Thuật Toán Quét Trùng Lặp</button>
+                            <button class="btn-outline" id="btn-ai-rewrite"><i class="fa-solid fa-rotate-right"></i> AI Viết Lại Đoạn Trùng Lặp</button>
+                        </div>
+                    </div>
+
+                    <!-- Result Panel & Similarity Gauge -->
+                    <div class="card-box result-card">
+                        <h3>Kết Quả Kiểm Tra Trùng Lặp (Similarity Report)</h3>
+                        <div class="gauge-wrapper">
+                            <div class="gauge-circle" id="similarity-gauge" style="--percent: 8%;">
+                                <div class="gauge-value"><span id="gauge-score">8</span>%</div>
+                                <div class="gauge-label">Tỷ lệ trùng lặp</div>
+                            </div>
+                            <div class="gauge-status-text">
+                                <span class="status-badge success" id="plagiarism-status-badge"><i class="fa-solid fa-circle-check"></i> ĐẠT CHUẨN (Dưới 15%)</span>
+                                <p class="small-text margin-top-sm">Văn bản đạt độ nguyên bản cao (92% Độc bản), có thể nộp Hội đồng Thẩm định SKKN.</p>
+                            </div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <h4>Các Đoạn Phát Hiện Nghi Ngờ Trùng Lặp:</h4>
+                        <div class="plagiarism-matches-list" id="plagiarism-matches-list">
+                            <div class="match-item">
+                                <div class="match-percent">12% trùng</div>
+                                <div class="match-details">
+                                    <p class="match-source"><strong>Nguồn đối soát:</strong> SKKN Mầm non Hà Nội (2024) - "Một số biện pháp rèn luyện tính tự lập cho trẻ mầm non"</p>
+                                    <div class="match-highlight">"...là thời kỳ vàng để hình thành tính tự lập, kỹ năng tự phục vụ và chủ động trong sinh hoạt hàng ngày..."</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: ĐƯA TÀI LIỆU THAM KHẢO LÊN (RAG KNOWLEDGE) -->
+        <section class="tab-panel" id="tab-references">
+            <div class="references-container">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-cloud-arrow-up"></i> Kho Tài Liệu Tham Khảo Nâng Cao (RAG Context)</h2>
+                    <p>Đưa sách giáo khoa, thông tư Bộ GD&ĐT, bài báo khoa học hoặc các bản SKKN mẫu lên để AI trích dẫn chính xác vào sáng kiến của Thầy/Cô.</p>
+                </div>
+
+                <div class="upload-dropzone" id="upload-zone">
+                    <i class="fa-solid fa-file-pdf upload-icon"></i>
+                    <h3>Kéo & Thả File Tài Liệu Tham Khảo Vào Đây</h3>
+                    <p>Hỗ trợ định dạng: <strong>.PDF, .DOCX, .TXT, .PNG/JPG</strong> (Tối đa 25MB/file)</p>
+                    <input type="file" id="file-input-ref" multiple accept=".pdf,.docx,.txt,.png,.jpg" hidden>
+                    <button class="btn-secondary" onclick="document.getElementById('file-input-ref').click()"><i class="fa-solid fa-folder-open"></i> Chọn File Từ Máy Tính</button>
+                </div>
+
+                <h3 class="margin-top-lg"><i class="fa-solid fa-book"></i> Danh Sách Tài Liệu Tham Khảo Đã Tải Lên</h3>
+                <div class="ref-files-list" id="ref-files-list">
+                    <div class="file-card">
+                        <div class="file-type pdf"><i class="fa-solid fa-file-pdf"></i></div>
+                        <div class="file-info">
+                            <h4>Chuong_Trinh_Giao_Duc_Mam_Non_Moi_BoGDDT.pdf</h4>
+                            <p>Dung lượng: 3.4 MB • Đã trích xuất 42 trang nội dung văn bản</p>
+                        </div>
+                        <span class="badge-tag">Đã Kết Nối AI</span>
+                        <button class="btn-icon text-danger" title="Xóa tài liệu"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+
+                    <div class="file-card">
+                        <div class="file-type docx"><i class="fa-solid fa-file-word"></i></div>
+                        <div class="file-info">
+                            <h4>SKKN_Mau_Ky_Nang_Song_Tre_5_Tuoi_Dạt_Cap_Tinh.docx</h4>
+                            <p>Dung lượng: 1.2 MB • Đã phân tích các giải pháp hay</p>
+                        </div>
+                        <span class="badge-tag">Đã Kết Nối AI</span>
+                        <button class="btn-icon text-danger" title="Xóa tài liệu"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: TỰ ĐỘNG TẠO BIỂU ĐỒ & ẢNH MINH HỌA -->
+        <section class="tab-panel" id="tab-charts">
+            <div class="charts-container">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-chart-column"></i> Tự Động Vẽ Biểu Đồ Khảo Sát & Tạo Ảnh Minh Họa SKKN</h2>
+                    <p>Phân tích số liệu khảo sát thực trạng Trước & Sau khi áp dụng biện pháp, tự động vẽ biểu đồ và tạo ảnh trực quan.</p>
+                </div>
+
+                <div class="charts-grid">
+                    <!-- Chart Generator Card -->
+                    <div class="card-box">
+                        <h3><i class="fa-solid fa-chart-pie"></i> 1. Biểu Đồ Số Liệu Khảo Sát Đối Chứng</h3>
+                        <p class="small-text">Bảng so sánh tỷ lệ đạt kỹ năng của trẻ trước và sau khi áp dụng sáng kiến (Đầu năm vs Cuối năm)</p>
+
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="surveyChart"></canvas>
+                        </div>
+
+                        <div class="chart-controls margin-top">
+                            <button class="btn-outline" id="btn-randomize-chart"><i class="fa-solid fa-dice"></i> AI Sinh Số Liệu Khảo Sát Mới</button>
+                            <button class="btn-secondary" id="btn-export-chart-img"><i class="fa-solid fa-download"></i> Tải Ảnh Biểu Đồ (PNG)</button>
+                        </div>
+                    </div>
+
+                    <!-- Illustration Generator Card -->
+                    <div class="card-box">
+                        <h3><i class="fa-solid fa-image"></i> 2. Ảnh Minh Họa Hoạt Động SKKN</h3>
+                        <p class="small-text">Hình ảnh minh họa góc hoạt động trải nghiệm của trẻ mầm non phục vụ chèn vào tài liệu</p>
+
+                        <div class="illustration-gallery" id="illustration-gallery">
+                            <div class="illust-card">
+                                <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=600&auto=format&fit=crop&q=60" alt="Bé tự dọn đồ chơi">
+                                <div class="illust-caption">Hình 1: Trẻ 5-6 tuổi tự giác dọn dẹp góc chơi ngăn nắp</div>
+                            </div>
+                            <div class="illust-card">
+                                <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&auto=format&fit=crop&q=60" alt="Bé tự đeo khẩu trang">
+                                <div class="illust-caption">Hình 2: Trải nghiệm kỹ năng vệ sinh cá nhân & tự phục vụ</div>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary full-width margin-top" id="btn-generate-more-images">
+                            <i class="fa-solid fa-wand-magic"></i> AI Sinh Thêm 2 Ảnh Minh Họa Hoạt Động Mới
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: TỰ ĐỘNG TẠO SLIDE THUYẾT TRÌNH -->
+        <section class="tab-panel" id="tab-slides">
+            <div class="slides-container">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-file-powerpoint"></i> Tự Động Tạo Slide Thuyết Trình SKKN Cho Hội Đồng</h2>
+                    <p>Cô đọng nội dung sáng kiến thành bài thuyết trình PowerPoint chuẩn 8-10 trang với thiết kế Mầm non rực rỡ, sẵn sàng bảo vệ.</p>
+                </div>
+
+                <div class="slides-viewer-box">
+                    <div class="slide-stage" id="slide-stage">
+                        <!-- Current Slide View -->
+                        <div class="slide-card active-slide" id="current-slide-card">
+                            <div class="slide-header">
+                                <span class="slide-tag">BÁO CÁO SÁNG KIẾN KINH NGHIỆM</span>
+                                <span class="slide-number">Trang 1 / 8</span>
+                            </div>
+                            <div class="slide-body center-content">
+                                <h1 class="slide-main-title">BIỆN PHÁP RÈN LUYỆN KỸ NĂNG TỰ PHỤC VỤ CHO TRẺ 5-6 TUỔI</h1>
+                                <p class="slide-sub-title">Thông qua các hoạt động trải nghiệm thực tế tại trường Mầm non</p>
+                                <div class="slide-meta-info">
+                                    <p><i class="fa-solid fa-user-tie"></i> Báo cáo viên: <strong>Nguyễn Thị Phương Thảo</strong></p>
+                                    <p><i class="fa-solid fa-school"></i> Đơn vị: <strong>Trường Mầm non Hoa Sen</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide Navigation Controls -->
+                    <div class="slide-controls">
+                        <button class="btn-circle" id="btn-prev-slide"><i class="fa-solid fa-chevron-left"></i></button>
+                        <span class="slide-indicator" id="slide-indicator">Slide 1 / 8</span>
+                        <button class="btn-circle" id="btn-next-slide"><i class="fa-solid fa-chevron-right"></i></button>
+
+                        <div class="slides-action-right">
+                            <button class="btn-outline" id="btn-fullscreen-slide"><i class="fa-solid fa-expand"></i> Trình Chiếu Fullscreen</button>
+                            <button class="btn-accent" id="btn-export-pptx"><i class="fa-solid fa-download"></i> Tải Bài PowerPoint (.PPTX)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide Thumbnails Grid -->
+                <h3 class="margin-top-lg">Danh Sách Slide Thuyết Trình:</h3>
+                <div class="slides-thumbnails-grid" id="slides-thumbs">
+                    <div class="thumb-card active" data-slide-index="0">
+                        <div class="thumb-num">1</div>
+                        <div class="thumb-title">Trang bìa báo cáo</div>
+                    </div>
+                    <div class="thumb-card" data-slide-index="1">
+                        <div class="thumb-num">2</div>
+                        <div class="thumb-title">Lý do chọn đề tài</div>
+                    </div>
+                    <div class="thumb-card" data-slide-index="2">
+                        <div class="thumb-num">3</div>
+                        <div class="thumb-title">Thực trạng ban đầu</div>
+                    </div>
+                    <div class="thumb-card" data-slide-index="3">
+                        <div class="thumb-num">4</div>
+                        <div class="thumb-title">Biện pháp 1: Môi trường mở</div>
+                    </div>
+                    <div class="thumb-card" data-slide-index="4">
+                        <div class="thumb-num">5</div>
+                        <div class="thumb-title">Biện pháp 2: Tiết học trải nghiệm</div>
+                    </div>
+                    <div class="thumb-card" data-slide-index="5">
+                        <div class="thumb-num">6</div>
+                        <div class="thumb-title">Biện pháp 3: Phối hợp gia đình</div>
+                    </div>
+                    <div class="thumb-card" data-slide-index="6">
+                        <div class="thumb-num">7</div>
+                        <div class="thumb-title">Kết quả khảo sát đối chứng</div>
+                    </div>
+                    <div class="thumb-card" data-slide-index="7">
+                        <div class="thumb-num">8</div>
+                        <div class="thumb-title">Kết luận & Lời cảm ơn</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Nhật Ký Đăng Nhập -->
+    <div class="modal-overlay" id="modal-history">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-clock-rotate-left"></i> Nhật Ký Đăng Nhập Cá Nhân</h3>
+                <button class="close-modal" id="btn-close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="user-summary-box">
+                    <p><strong>Giáo viên:</strong> Nguyễn Thị Phương Thảo</p>
+                    <p><strong>Tài khoản:</strong> thao.nguyen@mamnonhoasen.edu.vn</p>
+                    <p><strong>Thời gian đăng nhập gần nhất:</strong> <span class="highlight-text">08/08/2026 09:19:49</span></p>
+                </div>
+
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Thời gian đăng nhập</th>
+                            <th>Địa chỉ IP</th>
+                            <th>Thiết bị & Trình duyệt</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>08/08/2026 - 09:19:49</td>
+                            <td>113.161.42.18</td>
+                            <td>Windows 11 / Chrome 124.0</td>
+                            <td><span class="status-pill success">Thành công</span></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>07/08/2026 - 14:35:10</td>
+                            <td>113.161.42.18</td>
+                            <td>Windows 11 / Chrome 124.0</td>
+                            <td><span class="status-pill success">Thành công</span></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>05/08/2026 - 08:10:22</td>
+                            <td>14.232.105.90</td>
+                            <td>iPad iOS 17.4 / Safari</td>
+                            <td><span class="status-pill success">Thành công</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

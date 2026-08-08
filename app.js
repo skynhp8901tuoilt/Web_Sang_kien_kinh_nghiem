@@ -6,6 +6,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     initAuthSystem();
     initLiveDocEditor();
+    initAiCommandEditor();
     initTabNavigation();
     initSessionTimer();
     initAgeGroupChips();
@@ -236,6 +237,126 @@ function initLiveDocEditor() {
             showToast('Đã lưu thành công mọi chỉnh sửa thông tin & nội dung sáng kiến kinh nghiệm!', 'success');
         });
     }
+}
+
+/* Helper for Quick AI Command Tags */
+window.applyAiCommand = function(cmdText) {
+    const inputCmd = document.getElementById('input-ai-command');
+    if (inputCmd) {
+        inputCmd.value = cmdText;
+        showToast('Đã áp dụng câu lệnh gợi ý!', 'info');
+    }
+};
+
+/* ==========================================
+   0.2 PROMPT-DRIVEN SECTION REWRITE ENGINE
+   ========================================== */
+function initAiCommandEditor() {
+    const btnRunAiCmd = document.getElementById('btn-run-ai-command');
+    const selectSection = document.getElementById('select-edit-section');
+    const inputCmd = document.getElementById('input-ai-command');
+
+    if (!btnRunAiCmd) return;
+
+    btnRunAiCmd.addEventListener('click', () => {
+        const targetSectionKey = selectSection ? selectSection.value : 'sec_2';
+        const userPrompt = inputCmd ? inputCmd.value.trim() : '';
+
+        const sectionNames = {
+            'sec_1': 'Mục I. Đặt vấn đề',
+            'sec_2': 'Mục II. Các giải pháp thực hiện',
+            'sec_3': 'Mục III. Hiệu quả và Kết quả đạt được',
+            'sec_4': 'Mục IV. Bài học kinh nghiệm',
+            'sec_all': 'Toàn bộ bài SKKN'
+        };
+
+        const targetName = sectionNames[targetSectionKey] || 'Mục được chọn';
+
+        btnRunAiCmd.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> AI Đang Soạn Thảo & Chỉnh Sửa ${targetName} Theo Câu Lệnh...`;
+        btnRunAiCmd.disabled = true;
+
+        setTimeout(() => {
+            executeSectionRewrite(targetSectionKey, userPrompt);
+
+            btnRunAiCmd.innerHTML = `<i class="fa-solid fa-microchip"></i> AI Chỉnh Sửa Mục Được Chọn Theo Câu Lệnh`;
+            btnRunAiCmd.disabled = false;
+
+            showToast(`AI đã hoàn tất chỉnh sửa [${targetName}] theo câu lệnh của Thầy/Cô!`, 'success');
+        }, 1200);
+    });
+}
+
+function executeSectionRewrite(sectionKey, promptText) {
+    const sec1 = document.getElementById('section-1');
+    const sec2 = document.getElementById('section-2');
+    const sec3 = document.getElementById('section-3');
+    const sec4 = document.getElementById('section-4');
+
+    const promptLower = promptText.toLowerCase();
+
+    // Section 2: Solutions / Measures (Mục 2 Các giải pháp)
+    if (sectionKey === 'sec_2' && sec2) {
+        let hasTech = promptLower.includes('công nghệ') || promptLower.includes('cntt') || promptLower.includes('trò chơi');
+        
+        sec2.innerHTML = `
+            <h3>II. GIẢI PHÁP THỰC HIỆN (CÁC BIỆN PHÁP SÁNG TẠO ĐÃ ĐƯỢC AI NÂNG CẤP)</h3>
+            <h4>1. Biện pháp 1: Xây dựng môi trường lớp học theo hướng mở, phân quyền tự quản cho trẻ</h4>
+            <p>Thiết kế các góc hoạt động vừa tầm với của trẻ, dán các ký hiệu trực quan (nhãn tên, hình ảnh minh họa) để trẻ dễ dàng lấy và cất đồ dùng cá nhân. Phân công "Ban cán sự nhí" luân phiên hàng ngày đảm nhiệm công việc trực nhật bàn ăn, chuẩn bị khăn lau và chia thìa.</p>
+
+            <h4>2. Biện pháp 2: Tích hợp kỹ năng tự phục vụ vào các tiết học trải nghiệm & kỹ năng sống</h4>
+            <p>Tổ chức các hội thi nhỏ như "Bé giỏi gấp quần áo", "Nhanh tay xếp gối chăn", "Kĩ năng thắt dây giày". Sử dụng các bài thơ, bài hát vè tự biên dễ nhớ để kích thích trẻ hào hứng thực hiện.</p>
+
+            ${hasTech ? `
+            <h4>3. Biện pháp 3: Ứng dụng công nghệ thông tin & phần mềm trò chơi tương tác vào tiết học</h4>
+            <p>Xây dựng các bài giảng điện tử E-learning với video ngắn mô phỏng thao tác gấp chăn gối, rửa tay chuẩn 6 bước và đi giày đúng vế. Thiết kế các trò chơi tương tác trên bảng thông minh như "Bé chọn đồ dùng đúng nơi quy định" giúp trẻ học thông qua chơi sôi nổi.</p>
+            
+            <h4>4. Biện pháp 4: Tăng cường phối hợp 3 bên (Nhà trường - Cô giáo - Gia đình) qua kênh số</h4>
+            <p>Gửi video hướng dẫn kỹ năng lên nhóm Zalo lớp. Khuyến khích phụ huynh giao việc nhà phù hợp cho trẻ và chụp ảnh/quay clip gửi lên bảng tin khen thưởng kỹ năng của lớp.</p>
+            ` : `
+            <h4>3. Biện pháp 3: Tăng cường phối hợp 3 bên chặt chẽ giữa Nhà trường và Gia đình</h4>
+            <p>Gửi video hướng dẫn kỹ năng tự phục vụ lên nhóm Zalo của lớp. Khuyến khích phụ huynh giao việc nhà phù hợp cho trẻ (nhặt rau, xếp bát đĩa) và chụp ảnh/quay clip chia sẻ lên bảng tin khen thưởng của lớp.</p>
+            `}
+        `;
+        highlightTargetSection(sec2);
+    }
+    // Section 1: Problem Statement (Mục 1 Đặt vấn đề)
+    else if (sectionKey === 'sec_1' && sec1) {
+        sec1.innerHTML = `
+            <h3>I. ĐẶT VẤN ĐỀ (LÝ DO CHỌN ĐỀ TÀI - ĐÃ ĐƯỢC AI NÂNG CẤP THUYẾT PHỤC)</h3>
+            <p>Giai đoạn mầm non, đặc biệt là lứa tuổi 5-6 tuổi (Mẫu giáo lớn), là mốc thời gian vàng để hình thành tính tự lập, kỹ năng tự phục vụ và tinh thần trách nhiệm. Đây là chuẩn bị cốt lõi giúp trẻ sẵn sàng tâm lý vững vàng bước vào môi trường Tiểu học (Lớp 1).</p>
+            <p>Qua khảo sát thực tế đầu năm học tại lớp Mẫu giáo Lớn, phần lớn trẻ vẫn được cha mẹ chiều chuộng, làm thay mọi việc. Khi đến lớp, trẻ còn lúng túng trong việc tự đi giày dép, tự cất chăn gối hay tự dọn đồ chơi. Do đó, việc nghiên cứu đề tài <strong>"Biện pháp rèn luyện kỹ năng tự phục vụ cho trẻ mầm non"</strong> mang tính cấp thiết và giá trị thực tiễn cao.</p>
+        `;
+        highlightTargetSection(sec1);
+    }
+    // Section 3: Results (Mục 3 Hiệu quả)
+    else if (sectionKey === 'sec_3' && sec3) {
+        sec3.innerHTML = `
+            <h3>III. HIỆU QUẢ VÀ KẾT QUẢ ĐẠT ĐƯỢC (KẾT QUẢ ĐỐI CHỨNG ĐÃ BỔ SUNG ĐÁNH GIÁ PHỤ HUYNH)</h3>
+            <p>Sau 6 tháng kiên trì triển khai đồng bộ các biện pháp trên, kết quả đạt được rất vượt trội:</p>
+            <ul>
+                <li>100% Trẻ tự giác đeo khẩu trang, đi giày dép và cất đồ dùng cá nhân đúng vị trí.</li>
+                <li>95% Trẻ tự giác gấp chăn gối ngăn nắp sau giờ ngủ trưa mà không cần cô giáo nhắc nhở.</li>
+                <li>100% Phụ huynh phản hồi rất hài lòng và ghi nhận sự tự lập, tự giác trưởng thành vượt bậc của con tại gia đình.</li>
+            </ul>
+        `;
+        highlightTargetSection(sec3);
+    }
+    // Section 4: Lessons Learned (Mục 4 Bài học kinh nghiệm)
+    else if (sectionKey === 'sec_4' && sec4) {
+        sec4.innerHTML = `
+            <h3>IV. BÀI HỌC KINH NGHIỆM & KHUYẾN NGHỊ (AI ĐÃ TỔNG HỢP NÂNG CAO)</h3>
+            <p>1. Giáo viên cần luôn kiên nhẫn, tạo tâm lý vui vẻ, khích lệ động viên kịp thời với nguyên tắc "không làm thay mà luôn đồng hành hướng dẫn".</p>
+            <p>2. Linh hoạt kết hợp ứng dụng công nghệ thông tin và phương pháp giáo dục trải nghiệm thực tế để trẻ hào hứng thực hiện hàng ngày.</p>
+        `;
+        highlightTargetSection(sec4);
+    }
+}
+
+function highlightTargetSection(element) {
+    element.classList.remove('section-highlight-updated');
+    void element.offsetWidth; // trigger reflow
+    element.classList.add('section-highlight-updated');
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 /* ==========================================

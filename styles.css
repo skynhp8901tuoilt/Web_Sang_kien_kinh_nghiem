@@ -1483,3 +1483,38 @@ body {
     cursor: text;
 }
 
+/* AI Command Editor Panel Styling */
+.ai-command-panel {
+    background: linear-gradient(135deg, #f8f0fc, #eef2ff);
+    border: 1px solid #eebefa;
+    margin-bottom: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 4px 16px rgba(174, 62, 201, 0.08);
+}
+
+.badge-tag.accent {
+    background: #f3d9fa;
+    color: #ae3ec9;
+}
+
+.ai-command-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+/* Highlight Updated Section Effect */
+.section-highlight-updated {
+    animation: highlightPulse 2s ease;
+    border-left: 4px solid var(--secondary-color) !important;
+    background: #e6fcf5 !important;
+    padding: 1rem !important;
+    border-radius: var(--radius-md) !important;
+}
+
+@keyframes highlightPulse {
+    0% { background: #d3f9d8; transform: scale(1.01); }
+    50% { background: #b2f2bb; }
+    100% { background: #e6fcf5; transform: scale(1); }
+}
+

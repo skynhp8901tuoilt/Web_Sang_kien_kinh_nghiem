@@ -192,6 +192,41 @@
                         </div>
                     </div>
 
+                    <!-- Bảng AI Chỉnh Sửa SKKN Theo Câu Lệnh / Ý Tưởng Từng Mục -->
+                    <div class="card-box ai-command-panel" id="ai-command-edit-panel">
+                        <div class="meta-box-header">
+                            <h4><i class="fa-solid fa-wand-magic-sparkles"></i> AI Chỉnh Sửa Từng Mục Theo Câu Lệnh & Ý Tưởng Người Dùng</h4>
+                            <span class="badge-tag accent">Tự Động Viết Lại Mục Được Chọn</span>
+                        </div>
+                        <div class="ai-command-grid">
+                            <div class="form-group">
+                                <label for="select-edit-section"><i class="fa-solid fa-list-check"></i> 1. Chọn Mục Cần AI Chỉnh Sửa trong SKKN:</label>
+                                <select id="select-edit-section" class="form-control">
+                                    <option value="sec_2" selected>Mục II: Các giải pháp thực hiện (Các biện pháp sáng tạo)</option>
+                                    <option value="sec_1">Mục I: Đặt vấn đề (Lý do chọn đề tài)</option>
+                                    <option value="sec_3">Mục III: Hiệu quả và Kết quả đạt được (Khảo sát đối chứng)</option>
+                                    <option value="sec_4">Mục IV: Bài học kinh nghiệm & Khuyến nghị</option>
+                                    <option value="sec_all">Toàn bộ văn bản bản thảo SKKN</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-grid-width">
+                                <label for="input-ai-command"><i class="fa-solid fa-comment-dots"></i> 2. Nhập Ý Tưởng Hoặc Câu Lệnh Điều Chỉnh Cho Mục Này:</label>
+                                <textarea id="input-ai-command" class="form-control text-area" rows="2" placeholder="Ví dụ: Hãy viết lại Mục 2 các giải pháp chi tiết hơn, bổ sung thêm biện pháp ứng dụng công nghệ thông tin và trò chơi học tập tương tác cho trẻ mầm non..."></textarea>
+                                
+                                <div class="quick-topics margin-top-sm">
+                                    <small>Gợi ý câu lệnh mẫu nhanh:</small>
+                                    <button type="button" class="topic-tag" onclick="applyAiCommand('Bổ sung thêm biện pháp 4: Ứng dụng công nghệ thông tin & trò chơi tương tác vào Mục 2 các giải pháp')">Bổ sung ứng dụng CNTT vào Mục 2</button>
+                                    <button type="button" class="topic-tag" onclick="applyAiCommand('Viết lại Mục 1 Đặt vấn đề sâu sắc hơn với số liệu khảo sát tâm lý trẻ mầm non thực tế')">Viết lại Mục 1 thuyết phục hơn</button>
+                                    <button type="button" class="topic-tag" onclick="applyAiCommand('Bổ sung thêm ý kiến đánh giá tích cực và sự đồng hành của phụ huynh học sinh vào Mục 3')">Mở rộng Mục 3 với ý kiến phụ huynh</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn-accent full-width margin-top" id="btn-run-ai-command">
+                            <i class="fa-solid fa-microchip"></i> AI Chỉnh Sửa Mục Được Chọn Theo Câu Lệnh
+                        </button>
+                    </div>
+
                     <div class="editor-content-card" id="skkn-content-area">
                         <!-- Floating Toolbar For Rich Text Editing -->
                         <div class="formatting-toolbar" id="formatting-toolbar">
@@ -220,13 +255,13 @@
                             </div>
 
                             <div class="skkn-body" id="skkn-body-text">
-                                <section class="skkn-section">
+                                <section class="skkn-section" id="section-1">
                                     <h3>I. ĐẶT VẤN ĐỀ (LÝ DO CHỌN ĐỀ TÀI)</h3>
                                     <p>Trẻ em lứa tuổi mầm non, đặc biệt là giai đoạn 5-6 tuổi (Mẫu giáo lớn), là thời kỳ vàng để hình thành tính tự lập, kỹ năng tự phục vụ và chủ động trong sinh hoạt hàng ngày. Đây là nền tảng cốt lõi giúp trẻ chuẩn bị tâm lý và kỹ năng vững vàng khi bước sang môi trường Tiểu học (Lớp 1).</p>
                                     <p>Thực tế tại lớp Mẫu giáo Lớn A1 trường Mầm non Hoa Sen, phần lớn trẻ vẫn được cha mẹ nuông chiều tại nhà, dẫn đến tâm lý ỷ lại. Khi đến lớp, trẻ còn lúng túng trong việc tự đi giày dép, tự cất gối chăn sau giờ ngủ, tự rót nước uống hay tự dọn dẹp đồ chơi. Do đó, tôi đã lựa chọn đề tài <strong>"Biện pháp rèn luyện kỹ năng tự phục vụ cho trẻ 5-6 tuổi thông qua các hoạt động trải nghiệm thực tế"</strong> nhằm đưa ra giải pháp thiết thực áp dụng tại nhà trường.</p>
                                 </section>
 
-                                <section class="skkn-section">
+                                <section class="skkn-section" id="section-2">
                                     <h3>II. GIẢI PHÁP THỰC HIỆN (CÁC BIỆN PHÁP SÁNG TẠO)</h3>
                                     <h4>1. Biện pháp 1: Xây dựng môi trường lớp học theo hướng mở, phân quyền tự quản cho trẻ</h4>
                                     <p>Thiết kế các góc hoạt động vừa tầm với của trẻ, dán các ký hiệu trực quan (nhãn tên, hình ảnh minh họa) để trẻ dễ dàng lấy và cất đồ dùng cá nhân. Phân công "Ban cán sự nhí" luân phiên hàng ngày đảm nhiệm công việc trực nhật bàn ăn, chuẩn bị khăn lau và chia thìa.</p>
@@ -238,7 +273,7 @@
                                     <p>Gửi video hướng dẫn kỹ năng tự phục vụ lên nhóm Zalo của lớp. Khuyến khích phụ huynh giao việc nhà phù hợp cho trẻ (nhặt rau, xếp bát đĩa) và chụp ảnh/quay clip chia sẻ lên bảng tin khen thưởng của lớp.</p>
                                 </section>
 
-                                <section class="skkn-section">
+                                <section class="skkn-section" id="section-3">
                                     <h3>III. HIỆU QUẢ VÀ KẾT QUẢ ĐẠT ĐƯỢC (KẾT QUẢ ĐỐI CHỨNG)</h3>
                                     <p>Sau 6 tháng kiên trì triển khai các biện pháp trên tại lớp Mẫu giáo Lớn A1, kết quả thu được rất khả quan:</p>
                                     <ul>
@@ -248,7 +283,7 @@
                                     </ul>
                                 </section>
 
-                                <section class="skkn-section">
+                                <section class="skkn-section" id="section-4">
                                     <h3>IV. BÀI HỌC KINH NGHIỆM & KHUYẾN NGHỊ</h3>
                                     <p>Giáo viên cần luôn kiên nhẫn, động viên khích lệ trẻ kịp thời, "không làm thay mà chỉ hướng dẫn". Cần tạo cho trẻ tâm lý vui vẻ, tôn trọng sự độc lập của trẻ.</p>
                                 </section>

@@ -19,6 +19,10 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- TỰ ĐỘNG THÊM CỘT NẾU BẢNG ĐÃ TỒN TẠI TỪ TRƯỚC (SỬA LỖI 42703)
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS system_role TEXT DEFAULT 'ROLE_TEACHER';
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE;
+
 -- Bật Row Level Security (RLS) cho Profiles
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 

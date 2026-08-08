@@ -6,6 +6,7 @@ import PlagiarismTab from './components/PlagiarismTab';
 import ReferencesTab from './components/ReferencesTab';
 import ChartsTab from './components/ChartsTab';
 import SlidesTab from './components/SlidesTab';
+import AdminDashboard from './components/admin/AdminDashboard';
 import AuthModal from './components/AuthModal';
 import SupabaseConfigModal from './components/SupabaseConfigModal';
 import ToastContainer from './components/ToastContainer';
@@ -91,6 +92,7 @@ export default function App() {
         {activeTab === 'tab-references' && <ReferencesTab showToast={showToast} />}
         {activeTab === 'tab-charts' && <ChartsTab showToast={showToast} />}
         {activeTab === 'tab-slides' && <SlidesTab showToast={showToast} />}
+        {activeTab === 'tab-admin' && <AdminDashboard showToast={showToast} />}
       </main>
 
       <AuthModal 

@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     school_name TEXT DEFAULT 'Trường Mầm non Hoa Sen',
     school_address TEXT DEFAULT 'ỦY BÀN NHÂN DÂN QUẬN / HUYỆN NGHỆ AN',
     role TEXT DEFAULT 'Giáo viên Mầm non - Khối Mẫu giáo Lớn',
+    system_role TEXT DEFAULT 'ROLE_TEACHER', -- 'ROLE_TEACHER', 'ROLE_EXPERT_REVIEWER', 'ROLE_ADMIN'
+    is_active BOOLEAN DEFAULT TRUE,
     last_login_at TIMESTAMPTZ DEFAULT NOW(),
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -23,12 +25,16 @@ ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Cho phép người dùng xem profile cá nhân" ON public.profiles;
 CREATE POLICY "Cho phép người dùng xem profile cá nhân"
     ON public.profiles FOR SELECT
-    USING (auth.uid() = id);
+    USING (auth.uid() = id OR EXISTS (
+        SELECT 1 FROM public.profiles WHERE id = auth.uid() AND system_role = 'ROLE_ADMIN'
+    ));
 
 DROP POLICY IF EXISTS "Cho phép người dùng cập nhật profile cá nhân" ON public.profiles;
 CREATE POLICY "Cho phép người dùng cập nhật profile cá nhân"
     ON public.profiles FOR UPDATE
-    USING (auth.uid() = id);
+    USING (auth.uid() = id OR EXISTS (
+        SELECT 1 FROM public.profiles WHERE id = auth.uid() AND system_role = 'ROLE_ADMIN'
+    ));
 
 -- 2. TRIGGER TỰ ĐỘNG TẠO PROFILE KHI ĐĂNG NHẬP BẰNG GOOGLE / EMAIL
 CREATE OR REPLACE FUNCTION public.handle_new_user()

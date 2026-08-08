@@ -6,7 +6,8 @@ export default function Navigation({ activeTab, setActiveTab }) {
     { id: 'tab-plagiarism', icon: 'fa-shield-halved', label: 'Kiểm Trùng Lặp' },
     { id: 'tab-references', icon: 'fa-folder-open', label: 'Đưa Tài Liệu Lên' },
     { id: 'tab-charts', icon: 'fa-chart-pie', label: 'Biểu Đồ & Ảnh' },
-    { id: 'tab-slides', icon: 'fa-file-powerpoint', label: 'Slide Thuyết Trình' }
+    { id: 'tab-slides', icon: 'fa-file-powerpoint', label: 'Slide Thuyết Trình' },
+    { id: 'tab-admin', icon: 'fa-user-shield', label: 'Quản Trị Admin' }
   ];
 
   return (

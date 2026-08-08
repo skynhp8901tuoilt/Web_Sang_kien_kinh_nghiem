@@ -19,9 +19,10 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- TỰ ĐỘNG THÊM CỘT NẾU BẢNG ĐÃ TỒN TẠI TỪ TRƯỚC (SỬA LỖI 42703)
+-- TỰ ĐỘNG THÊM CỘT & THIẾT LẬP ID DEFAULT NẾU BẢNG ĐÃ TỒN TẠI TỪ TRƯỚC (SỬA LỖI 23502 & 42703)
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS system_role TEXT DEFAULT 'ROLE_TEACHER';
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE;
+ALTER TABLE public.profiles ALTER COLUMN id SET DEFAULT gen_random_uuid();
 
 -- CHO PHÉP MỌI KẾT NỐI WEB ĐỒNG BỘ PROFILES (TRÁNH LỖI BẢNG TRỐNG)
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
@@ -35,12 +36,12 @@ CREATE POLICY "Cho phép chèn và đồng bộ profile từ Web" ON public.prof
 DROP POLICY IF EXISTS "Cho phép cập nhật profile từ Web" ON public.profiles;
 CREATE POLICY "Cho phép cập nhật profile từ Web" ON public.profiles FOR UPDATE USING (true);
 
--- GÁN CẤP NGUỒN TÀI KHOẢN QUẢN TRỊ VIÊN ADMIN CHO SKYNHP8901@GMAIL.COM
-INSERT INTO public.profiles (email, full_name, school_name, system_role)
+-- GÁN CẤP NGUỒN TÀI KHOẢN QUẢN TRỊ VIÊN ADMIN CHO SKYNHP8901@GMAIL.COM (THÊM GEN_RANDOM_UUID() SỬA LỖI 23502)
+INSERT INTO public.profiles (id, email, full_name, school_name, system_role)
 VALUES 
-    ('skynhp8901@gmail.com', 'Quản trị viên skynhp8901', 'Trường Mầm non Hoa Sen', 'ROLE_ADMIN'),
-    ('thao.nguyen@gmail.com', 'Cô Phạm Thị Thanh Thảo', 'Trường Mầm non Ánh Dương', 'ROLE_TEACHER'),
-    ('phuongmai.nursery@edu.vn', 'Cô Trần Phương Mai', 'Trường Mầm non Sao Mai', 'ROLE_EXPERT_REVIEWER')
+    (gen_random_uuid(), 'skynhp8901@gmail.com', 'Quản trị viên skynhp8901', 'Trường Mầm non Hoa Sen', 'ROLE_ADMIN'),
+    (gen_random_uuid(), 'thao.nguyen@gmail.com', 'Cô Phạm Thị Thanh Thảo', 'Trường Mầm non Ánh Dương', 'ROLE_TEACHER'),
+    (gen_random_uuid(), 'phuongmai.nursery@edu.vn', 'Cô Trần Phương Mai', 'Trường Mầm non Sao Mai', 'ROLE_EXPERT_REVIEWER')
 ON CONFLICT (email) DO UPDATE 
 SET system_role = EXCLUDED.system_role, last_login_at = NOW();
 

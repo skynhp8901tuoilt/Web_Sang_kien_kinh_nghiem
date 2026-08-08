@@ -23,6 +23,9 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS system_role TEXT DEFAULT 'ROLE_TEACHER';
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE;
 
+-- GÁN QUYỀN QUẢN TRỊ VIÊN ADMIN CAO CẤP CHO NGUYENTHANHDUOCATHY@GMAIL.COM
+UPDATE public.profiles SET system_role = 'ROLE_ADMIN' WHERE email = 'nguyenthanhduocathy@gmail.com';
+
 -- Bật Row Level Security (RLS) cho Profiles
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 

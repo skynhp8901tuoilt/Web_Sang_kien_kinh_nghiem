@@ -4,6 +4,7 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+    initAuthSystem();
     initTabNavigation();
     initSessionTimer();
     initAgeGroupChips();
@@ -14,6 +15,95 @@ document.addEventListener('DOMContentLoaded', () => {
     initSlidePresentation();
     initUserHistoryModal();
 });
+
+/* ==========================================
+   0. AUTHENTICATION & LOGIN MANAGEMENT
+   ========================================== */
+function initAuthSystem() {
+    const authModal = document.getElementById('modal-auth-screen');
+    const btnEmailLogin = document.getElementById('btn-email-login');
+    const btnGoogleLogin = document.getElementById('btn-google-login');
+    const btnLogout = document.getElementById('btn-logout');
+    const emailInput = document.getElementById('auth-email-input');
+
+    // Load persisted user session from localStorage or default to skynhp8901@gmail.com
+    const savedUserJson = localStorage.getItem('skkn_user');
+    if (savedUserJson) {
+        try {
+            const user = JSON.parse(savedUserJson);
+            applyUserSession(user);
+            if (authModal) authModal.classList.remove('active');
+        } catch (e) {
+            loginUser('skynhp8901@gmail.com');
+        }
+    } else {
+        // Show auth modal to block unauthenticated access
+        if (authModal) authModal.classList.add('active');
+    }
+
+    if (btnEmailLogin) {
+        btnEmailLogin.addEventListener('click', () => {
+            const email = emailInput ? emailInput.value.trim() : '';
+            if (!email || !email.includes('@')) {
+                showToast('Vui lòng nhập định dạng Email hợp lệ (ví dụ: skynhp8901@gmail.com)!', 'info');
+                return;
+            }
+            loginUser(email, 'Email');
+        });
+    }
+
+    if (btnGoogleLogin) {
+        btnGoogleLogin.addEventListener('click', () => {
+            const googleEmail = (emailInput && emailInput.value.trim() && emailInput.value.includes('@')) 
+                ? emailInput.value.trim() 
+                : 'skynhp8901@gmail.com';
+            loginUser(googleEmail, 'Google');
+        });
+    }
+
+    if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+            localStorage.removeItem('skkn_user');
+            sessionSeconds = 0;
+            if (authModal) authModal.classList.add('active');
+            showToast('Đã đăng xuất tài khoản thành công. Vui lòng đăng nhập lại!', 'info');
+        });
+    }
+}
+
+function loginUser(email, provider = 'Email') {
+    const now = new Date();
+    const formattedTime = now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN');
+    const username = email.split('@')[0];
+
+    const userObj = {
+        email: email,
+        username: username,
+        avatarSeed: username,
+        loginTime: formattedTime,
+        provider: provider
+    };
+
+    localStorage.setItem('skkn_user', JSON.stringify(userObj));
+    applyUserSession(userObj);
+
+    const authModal = document.getElementById('modal-auth-screen');
+    if (authModal) authModal.classList.remove('active');
+
+    showToast(`Đăng nhập ${provider} thành công! Xin chào ${username} (${email})`, 'success');
+}
+
+function applyUserSession(user) {
+    const avatarImg = document.getElementById('user-avatar-img');
+    const nameElem = document.getElementById('user-display-name');
+    const emailElem = document.getElementById('user-display-email');
+    const loginTimeElem = document.getElementById('login-timestamp');
+
+    if (avatarImg) avatarImg.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.avatarSeed || 'skynhp8901'}`;
+    if (nameElem) nameElem.childNodes[0].nodeValue = user.username + ' ';
+    if (emailElem) emailElem.textContent = user.email;
+    if (loginTimeElem) loginTimeElem.textContent = user.loginTime || '08/08/2026 09:40:00';
+}
 
 /* ==========================================
    1. SESSION TIMER & TIMESTAMP LOGIC

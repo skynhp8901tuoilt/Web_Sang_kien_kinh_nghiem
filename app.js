@@ -5,6 +5,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     initAuthSystem();
+    initLiveDocEditor();
     initTabNavigation();
     initSessionTimer();
     initAgeGroupChips();
@@ -103,6 +104,138 @@ function applyUserSession(user) {
     if (nameElem) nameElem.childNodes[0].nodeValue = user.username + ' ';
     if (emailElem) emailElem.textContent = user.email;
     if (loginTimeElem) loginTimeElem.textContent = user.loginTime || '08/08/2026 09:40:00';
+    
+    // Also update document author view if elements exist
+    const viewAuthor = document.getElementById('view-author');
+    if (viewAuthor) viewAuthor.textContent = `${user.username} (${user.email})`;
+}
+
+/* ==========================================
+   0.1 LIVE INLINE DOCUMENT & METADATA EDITOR
+   ========================================== */
+function initLiveDocEditor() {
+    const editAuthor = document.getElementById('edit-author-name');
+    const editSchool = document.getElementById('edit-school-name');
+    const editAddress = document.getElementById('edit-school-address');
+    const editRole = document.getElementById('edit-user-role');
+    const editTitle = document.getElementById('edit-skkn-title');
+
+    const viewAuthor = document.getElementById('view-author');
+    const viewSchool = document.getElementById('view-school');
+    const viewUnit = document.getElementById('view-unit');
+    const viewAddress = document.getElementById('view-address');
+    const viewRole = document.getElementById('view-role');
+    const viewTitle = document.getElementById('view-title');
+    const docActiveTitle = document.getElementById('doc-active-title');
+
+    const btnToggleEdit = document.getElementById('btn-toggle-edit-mode');
+    const btnSaveCustomDoc = document.getElementById('btn-save-custom-doc');
+    const formattingToolbar = document.getElementById('formatting-toolbar');
+    const skknBody = document.getElementById('skkn-body-text');
+
+    // Real-time synchronization from input panel to document view
+    if (editAuthor && viewAuthor) {
+        editAuthor.addEventListener('input', (e) => {
+            const val = e.target.value;
+            const currentEmail = document.getElementById('user-display-email') ? document.getElementById('user-display-email').textContent : 'skynhp8901@gmail.com';
+            viewAuthor.textContent = `${val} (${currentEmail})`;
+        });
+    }
+
+    if (editSchool) {
+        editSchool.addEventListener('input', (e) => {
+            const val = e.target.value;
+            if (viewSchool) viewSchool.textContent = val;
+            if (viewUnit) viewUnit.textContent = val;
+        });
+    }
+
+    if (editAddress && viewAddress) {
+        editAddress.addEventListener('input', (e) => viewAddress.textContent = e.target.value);
+    }
+
+    if (editRole && viewRole) {
+        editRole.addEventListener('input', (e) => viewRole.textContent = e.target.value);
+    }
+
+    if (editTitle) {
+        editTitle.addEventListener('input', (e) => {
+            const val = e.target.value;
+            if (viewTitle) viewTitle.textContent = `"${val}"`;
+            if (docActiveTitle) docActiveTitle.textContent = val;
+        });
+    }
+
+    // Toggle Direct Inline Content Editing Mode
+    let isEditingActive = false;
+    if (btnToggleEdit && skknBody) {
+        btnToggleEdit.addEventListener('click', () => {
+            isEditingActive = !isEditingActive;
+            skknBody.contentEditable = isEditingActive;
+            skknBody.classList.toggle('skkn-body-editable', isEditingActive);
+
+            if (formattingToolbar) formattingToolbar.classList.toggle('active', isEditingActive);
+
+            if (isEditingActive) {
+                btnToggleEdit.innerHTML = `<i class="fa-solid fa-check"></i> Đang Sửa Trực Tiếp`;
+                btnToggleEdit.className = 'btn-secondary';
+                showToast('Chế độ Sửa Trực Tiếp đã kích hoạt! Hãy nhấp chuột vào bất kỳ dòng chữ nào để chỉnh sửa.', 'info');
+            } else {
+                btnToggleEdit.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Bật Sửa Trực Tiếp`;
+                btnToggleEdit.className = 'btn-primary';
+                showToast('Đã thoát chế độ Sửa Trực Tiếp.', 'info');
+            }
+        });
+    }
+
+    // Formatting Toolbar Buttons (Bold, Italic, Underline, Add Paragraph/Heading)
+    const toolBtns = document.querySelectorAll('.tool-btn[data-cmd]');
+    toolBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const cmd = btn.getAttribute('data-cmd');
+            document.execCommand(cmd, false, null);
+        });
+    });
+
+    const btnAddParagraph = document.getElementById('btn-add-paragraph');
+    const btnAddHeading = document.getElementById('btn-add-heading');
+
+    if (btnAddParagraph && skknBody) {
+        btnAddParagraph.addEventListener('click', () => {
+            const p = document.createElement('p');
+            p.textContent = 'Nhập nội dung đoạn văn mới của Thầy/Cô vào đây...';
+            skknBody.appendChild(p);
+            p.focus();
+            showToast('Đã thêm đoạn văn mới!', 'info');
+        });
+    }
+
+    if (btnAddHeading && skknBody) {
+        btnAddHeading.addEventListener('click', () => {
+            const h4 = document.createElement('h4');
+            h4.textContent = 'Mục mới: Nhập tiêu đề biện pháp hoặc ý tưởng mới...';
+            skknBody.appendChild(h4);
+            h4.focus();
+            showToast('Đã thêm tiêu đề mục lớn mới!', 'info');
+        });
+    }
+
+    // Save Customized Document & Metadata to localStorage
+    if (btnSaveCustomDoc) {
+        btnSaveCustomDoc.addEventListener('click', () => {
+            const customDocData = {
+                author: editAuthor ? editAuthor.value : 'skynhp8901',
+                school: editSchool ? editSchool.value : 'Trường Mầm non Hoa Sen',
+                address: editAddress ? editAddress.value : 'ỦY BÀN NHÂN DÂN QUẬN / HUYỆN NGHỆ AN',
+                role: editRole ? editRole.value : 'Giáo viên Mầm non - Khối Mẫu giáo Lớn',
+                title: editTitle ? editTitle.value : 'Biện pháp rèn luyện kỹ năng tự phục vụ cho trẻ 5-6 tuổi',
+                bodyHtml: skknBody ? skknBody.innerHTML : ''
+            };
+
+            localStorage.setItem('skkn_custom_doc', JSON.stringify(customDocData));
+            showToast('Đã lưu thành công mọi chỉnh sửa thông tin & nội dung sáng kiến kinh nghiệm!', 'success');
+        });
+    }
 }
 
 /* ==========================================
@@ -325,24 +458,29 @@ function initSkknGenerator() {
 
 /* Word Export Simulation */
 function exportDocx() {
-    const title = document.getElementById('doc-active-title').textContent;
-    const bodyContent = document.getElementById('skkn-content-area').innerText;
+    const address = document.getElementById('view-address') ? document.getElementById('view-address').textContent : 'ỦY BÀN NHÂN DÂN QUẬN / HUYỆN';
+    const school = document.getElementById('view-school') ? document.getElementById('view-school').textContent : 'TRƯỜNG MẦM NON HOA SEN';
+    const title = document.getElementById('doc-active-title') ? document.getElementById('doc-active-title').textContent : 'Sáng kiến kinh nghiệm';
+    const author = document.getElementById('view-author') ? document.getElementById('view-author').textContent : 'skynhp8901';
+    const bodyContent = document.getElementById('skkn-body-text') ? document.getElementById('skkn-body-text').innerText : '';
     
     const blob = new Blob([`
-        UỶ BAN NHÂN DÂN QUẬN / HUYỆN
-        TRƯỜNG MẦM NON HOA SEN
+        ${address.toUpperCase()}
+        ${school.toUpperCase()}
         ----------------------------------
         SÁNG KIẾN KINH NGHIỆM
-        Đề tài: ${title}
+        Đề tài: "${title}"
+        Tác giả: ${author}
 
+        NỘI DUNG SÁNG KIẾN KINH NGHIỆM:
         ${bodyContent}
     `], { type: 'application/msword' });
 
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `SKKN_MamNon_${title.substring(0, 30)}.doc`;
+    link.download = `SKKN_${title.substring(0, 25).replace(/[^a-zA-Z0-9]/g, '_')}.doc`;
     link.click();
-    showToast('Đã xuất file SKKN dạng Word (.doc) thành công!', 'success');
+    showToast('Đã xuất file SKKN dạng Word (.doc) với thông tin vừa chỉnh sửa!', 'success');
 }
 
 /* ==========================================

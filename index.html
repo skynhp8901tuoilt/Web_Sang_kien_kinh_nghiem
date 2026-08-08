@@ -154,25 +154,67 @@
                             <h2 id="doc-active-title">Sáng kiến kinh nghiệm: Rèn luyện kỹ năng tự phục vụ cho trẻ 5-6 tuổi</h2>
                         </div>
                         <div class="action-buttons">
+                            <button class="btn-primary" id="btn-toggle-edit-mode"><i class="fa-solid fa-pen-to-square"></i> Bật Sửa Trực Tiếp</button>
+                            <button class="btn-secondary" id="btn-save-custom-doc"><i class="fa-solid fa-floppy-disk"></i> Lưu Nội Dung</button>
                             <button class="btn-outline" id="btn-export-word"><i class="fa-solid fa-file-word"></i> Xuất File Word</button>
                             <button class="btn-outline" id="btn-send-to-plagiarism"><i class="fa-solid fa-magnifying-glass"></i> Kiểm Đạo Văn</button>
                             <button class="btn-accent" id="btn-generate-slides-direct"><i class="fa-solid fa-desktop"></i> Tạo Slide Ngay</button>
                         </div>
                     </div>
 
+                    <!-- Bảng Hiệu Chỉnh Nhanh Thông Tin Hành Chính & Ý Tưởng -->
+                    <div class="card-box meta-edit-box" id="meta-edit-panel">
+                        <div class="meta-box-header">
+                            <h4><i class="fa-solid fa-sliders"></i> Chỉnh Sửa Nhanh Thông Tin Tác Giả, Tên Trường, Địa Chỉ & Đề Tài</h4>
+                            <span class="badge-tag">Sửa Trực Tiếp Bất Kỳ Nội Dung Nào</span>
+                        </div>
+                        <div class="meta-form-grid">
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-user-pen"></i> Họ & Tên Tác Giả:</label>
+                                <input type="text" id="edit-author-name" class="form-control" value="skynhp8901">
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-school"></i> Tên Trường Mầm Non:</label>
+                                <input type="text" id="edit-school-name" class="form-control" value="Trường Mầm non Hoa Sen">
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-location-dot"></i> Địa Chỉ / Quận Huyện / Tỉnh Thành:</label>
+                                <input type="text" id="edit-school-address" class="form-control" value="ỦY BÀN NHÂN DÂN QUẬN / HUYỆN NGHỆ AN">
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-briefcase"></i> Chức Vụ / Khối Lớp:</label>
+                                <input type="text" id="edit-user-role" class="form-control" value="Giáo viên Mầm non - Khối Mẫu giáo Lớn">
+                            </div>
+                            <div class="form-group full-grid-width">
+                                <label><i class="fa-solid fa-heading"></i> Tên Đề Tài / Ý Tưởng Sáng Kiến Kinh Nghiệm:</label>
+                                <input type="text" id="edit-skkn-title" class="form-control" value="Biện pháp rèn luyện kỹ năng tự phục vụ và tự lập cho trẻ 5-6 tuổi thông qua các hoạt động trải nghiệm tại trường Mầm non">
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="editor-content-card" id="skkn-content-area">
+                        <!-- Floating Toolbar For Rich Text Editing -->
+                        <div class="formatting-toolbar" id="formatting-toolbar">
+                            <span class="toolbar-label"><i class="fa-solid fa-i-cursor"></i> Định dạng:</span>
+                            <button type="button" class="tool-btn" data-cmd="bold" title="In đậm (Ctrl+B)"><i class="fa-solid fa-bold"></i></button>
+                            <button type="button" class="tool-btn" data-cmd="italic" title="In nghiêng (Ctrl+I)"><i class="fa-solid fa-italic"></i></button>
+                            <button type="button" class="tool-btn" data-cmd="underline" title="Gạch chân (Ctrl+U)"><i class="fa-solid fa-underline"></i></button>
+                            <button type="button" class="tool-btn" id="btn-add-paragraph" title="Thêm đoạn văn mới"><i class="fa-solid fa-paragraph"></i> + Đoạn văn</button>
+                            <button type="button" class="tool-btn" id="btn-add-heading" title="Thêm mục lớn mới"><i class="fa-solid fa-plus"></i> + Mục lớn</button>
+                        </div>
+
                         <!-- Content will be rendered dynamically -->
                         <div class="skkn-document-view">
                             <div class="doc-header-formal">
-                                <p class="center bold">ỦY BÀN NHÂN DÂN QUẬN / HUYỆN NGHỆ AN</p>
-                                <p class="center bold">TRƯỜNG MẦM NON HOA SEN</p>
+                                <p class="center bold" id="view-address">ỦY BÀN NHÂN DÂN QUẬN / HUYỆN NGHỆ AN</p>
+                                <p class="center bold" id="view-school">TRƯỜNG MẦM NON HOA SEN</p>
                                 <hr class="divider-short">
                                 <h1 class="skkn-main-heading">SÁNG KIẾN KINH NGHIỆM</h1>
                                 <h2 class="skkn-sub-heading" id="view-title">"Biện pháp rèn luyện kỹ năng tự phục vụ và tự lập cho trẻ 5-6 tuổi thông qua các hoạt động trải nghiệm tại trường Mầm non"</h2>
                                 <div class="author-meta">
-                                    <p><strong>Tác giả:</strong> skynhp8901 (skynhp8901@gmail.com)</p>
-                                    <p><strong>Chức vụ:</strong> Giáo viên Mầm non - Khối Mẫu giáo Lớn</p>
-                                    <p><strong>Đơn vị:</strong> Trường Mầm non Hoa Sen</p>
+                                    <p><strong>Tác giả:</strong> <span id="view-author">skynhp8901 (skynhp8901@gmail.com)</span></p>
+                                    <p><strong>Chức vụ:</strong> <span id="view-role">Giáo viên Mầm non - Khối Mẫu giáo Lớn</span></p>
+                                    <p><strong>Đơn vị:</strong> <span id="view-unit">Trường Mầm non Hoa Sen</span></p>
                                     <p><strong>Lĩnh vực:</strong> Phát triển Tình cảm & Kỹ năng xã hội (MG 5-6 Tuổi)</p>
                                 </div>
                             </div>

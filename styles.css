@@ -1372,3 +1372,114 @@ body {
     line-height: 1.4;
 }
 
+/* Metadata Edit Box Styling */
+.meta-edit-box {
+    background: linear-gradient(135deg, #ffffff, #f1f3f5);
+    border: 1px solid #dbe4ff;
+    margin-bottom: 1rem;
+    padding: 1.25rem 1.5rem;
+}
+
+.meta-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.meta-box-header h4 {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--dark-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.meta-box-header h4 i {
+    color: var(--accent-color);
+}
+
+.meta-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.full-grid-width {
+    grid-column: span 2;
+}
+
+.meta-form-grid label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #495057;
+    margin-bottom: 0.35rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Rich Text Formatting Toolbar */
+.formatting-toolbar {
+    background: #212529;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 1.25rem;
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-md);
+}
+
+.formatting-toolbar.active {
+    display: flex;
+    animation: fadeIn 0.2s ease;
+}
+
+.toolbar-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #adb5bd;
+    margin-right: 0.5rem;
+}
+
+.tool-btn {
+    border: none;
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-family);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.tool-btn:hover {
+    background: var(--primary-color);
+}
+
+/* Edit Mode Highlighting & Editable Elements */
+.skkn-body-editable[contenteditable="true"] {
+    outline: 2px dashed var(--accent-color);
+    outline-offset: 8px;
+    background: #fafcff;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
+}
+
+.skkn-body-editable[contenteditable="true"] *:hover {
+    background: #edf2ff;
+    border-radius: 4px;
+    cursor: text;
+}
+

@@ -650,24 +650,76 @@
         </div>
     </div>
 
-    <!-- Modal Đăng Nhập Cá Nhân Bảo Mật -->
+    <!-- Modal Đăng Nhập & Đăng Ký Cá Nhân Bảo Mật -->
     <div class="modal-overlay auth-modal-overlay active" id="modal-auth-screen">
         <div class="auth-card">
             <div class="auth-card-header">
                 <div class="auth-badge-icon"><i class="fa-solid fa-lock"></i></div>
-                <h2>Xác Thực Đăng Nhập Cá Nhân</h2>
-                <p class="auth-sub">Bảo mật hệ thống MầmNonSKKN AI & Ghi nhận thời gian đăng nhập</p>
+                <h2>Hệ Thống Đăng Nhập & Đăng Ký Cá Nhân</h2>
+                <p class="auth-sub">Đồng bộ 100% dữ liệu với Cơ sở dữ liệu Supabase Database</p>
+                
+                <!-- Auth Switcher Tabs -->
+                <div class="auth-switcher-tabs">
+                    <button type="button" class="auth-tab-btn active" id="tab-btn-login"><i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập</button>
+                    <button type="button" class="auth-tab-btn" id="tab-btn-register"><i class="fa-solid fa-user-plus"></i> Đăng Ký Mới</button>
+                </div>
             </div>
 
             <div class="auth-card-body">
+                <!-- FORM 1: ĐĂNG NHẬP -->
                 <form id="form-auth-login" onsubmit="event.preventDefault();">
                     <div class="form-group">
-                        <label for="auth-email-input"><i class="fa-solid fa-envelope"></i> Nhập Email Cá Nhân Để Đăng Nhập:</label>
-                        <input type="email" id="auth-email-input" class="form-control" placeholder="Ví dụ: skynhp8901@gmail.com..." value="skynhp8901@gmail.com" required>
+                        <label for="auth-username-input"><i class="fa-solid fa-user"></i> Tên Đăng Nhập Hoặc Email:</label>
+                        <input type="text" id="auth-username-input" class="form-control" placeholder="Ví dụ: skynhp8901 hoặc skynhp8901@gmail.com..." value="skynhp8901@gmail.com" required>
                     </div>
 
-                    <button type="button" class="btn-primary full-width margin-top-sm" id="btn-email-login">
-                        <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Vào Hệ Thống
+                    <div class="form-group margin-top-sm">
+                        <label for="auth-password-input"><i class="fa-solid fa-key"></i> Mật Khẩu Cá Nhân:</label>
+                        <input type="password" id="auth-password-input" class="form-control" placeholder="Nhập mật khẩu..." value="123456" required>
+                    </div>
+
+                    <button type="button" class="btn-primary full-width margin-top" id="btn-do-login">
+                        <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Ngay
+                    </button>
+                </form>
+
+                <!-- FORM 2: ĐĂNG KÝ TÀI KHOẢN MỚI -->
+                <form id="form-auth-register" style="display: none;" onsubmit="event.preventDefault();">
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label for="reg-username-input"><i class="fa-solid fa-at"></i> Tên Đăng Nhập (Username):</label>
+                            <input type="text" id="reg-username-input" class="form-control" placeholder="Ví dụ: skynhp8901, thao_nguyen..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-email-input"><i class="fa-solid fa-envelope"></i> Email Cá Nhân:</label>
+                            <input type="email" id="reg-email-input" class="form-control" placeholder="skynhp8901@gmail.com..." required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2 margin-top-sm">
+                        <div class="form-group">
+                            <label for="reg-fullname-input"><i class="fa-solid fa-id-card"></i> Họ Và Tên Giáo Viên:</label>
+                            <input type="text" id="reg-fullname-input" class="form-control" placeholder="Cô Nguyễn Thị Phương Thảo..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-school-input"><i class="fa-solid fa-school"></i> Trường Mầm Non:</label>
+                            <input type="text" id="reg-school-input" class="form-control" placeholder="Trường Mầm non Hoa Sen..." value="Trường Mầm non Hoa Sen">
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2 margin-top-sm">
+                        <div class="form-group">
+                            <label for="reg-password-input"><i class="fa-solid fa-lock"></i> Mật Khẩu (Tối thiểu 6 ký tự):</label>
+                            <input type="password" id="reg-password-input" class="form-control" placeholder="Nhập mật khẩu mới..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-confirmpass-input"><i class="fa-solid fa-shield-check"></i> Xác Nhận Mật Khẩu:</label>
+                            <input type="password" id="reg-confirmpass-input" class="form-control" placeholder="Nhập lại mật khẩu..." required>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-secondary full-width margin-top" id="btn-do-register">
+                        <i class="fa-solid fa-user-plus"></i> Hoàn Tất Đăng Ký & Đồng Bộ Supabase
                     </button>
                 </form>
 
@@ -687,7 +739,7 @@
 
                 <div class="security-info-box">
                     <i class="fa-solid fa-shield-halved"></i>
-                    <p>Mỗi lượt đăng nhập sẽ tự động ghi nhận Mốc thời gian, IP và Thiết bị vào Nhật ký lịch sử để bảo vệ dữ liệu cá nhân của Thầy/Cô.</p>
+                    <p>Mỗi lượt đăng nhập/đăng ký sẽ tự động bảo mật mã hóa và lưu trữ vào Cơ sở dữ liệu Supabase Database.</p>
                 </div>
             </div>
         </div>

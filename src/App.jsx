@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
+import LessonPlanTab from './components/LessonPlanTab';
+import MaterialsTab from './components/MaterialsTab';
+import GamesTab from './components/GamesTab';
 import WriterTab from './components/WriterTab';
-import PlagiarismTab from './components/PlagiarismTab';
 import ReferencesTab from './components/ReferencesTab';
 import ChartsTab from './components/ChartsTab';
-import SlidesTab from './components/SlidesTab';
 import AdminDashboard from './components/admin/AdminDashboard';
 import AuthModal from './components/AuthModal';
 import SupabaseConfigModal from './components/SupabaseConfigModal';
 import ToastContainer from './components/ToastContainer';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('tab-writer');
+  const [activeTab, setActiveTab] = useState('tab-lesson-plan');
   const [user, setUser] = useState(() => {
     try {
       const saved = localStorage.getItem('skkn_user');
@@ -57,8 +58,9 @@ export default function App() {
     const fullUser = {
       email: userData.email,
       username: userData.username || userData.email.split('@')[0],
-      fullname: userData.fullname || 'Cô Nguyễn Thị Phương Thảo',
+      fullname: userData.fullname || (userData.email === 'skynhp8901@gmail.com' ? 'Quản trị viên skynhp8901' : 'Cô Phạm Thị Thanh Thảo'),
       school: userData.school || 'Trường Mầm non Hoa Sen',
+      system_role: userData.system_role || (userData.email === 'skynhp8901@gmail.com' ? 'ROLE_ADMIN' : 'ROLE_TEACHER'),
       loginTime: formattedTime,
       provider: userData.provider || 'Supabase DB'
     };
@@ -87,11 +89,12 @@ export default function App() {
       <Navigation activeTab={activeTab} setActiveTab={setActiveTab} user={user} showToast={showToast} />
 
       <main class="app-main">
+        {activeTab === 'tab-lesson-plan' && <LessonPlanTab showToast={showToast} user={user} />}
+        {activeTab === 'tab-materials' && <MaterialsTab showToast={showToast} user={user} />}
+        {activeTab === 'tab-games' && <GamesTab showToast={showToast} user={user} />}
         {activeTab === 'tab-writer' && <WriterTab showToast={showToast} />}
-        {activeTab === 'tab-plagiarism' && <PlagiarismTab showToast={showToast} />}
         {activeTab === 'tab-references' && <ReferencesTab showToast={showToast} />}
         {activeTab === 'tab-charts' && <ChartsTab showToast={showToast} />}
-        {activeTab === 'tab-slides' && <SlidesTab showToast={showToast} />}
         {activeTab === 'tab-admin' && <AdminDashboard user={user} showToast={showToast} />}
       </main>
 

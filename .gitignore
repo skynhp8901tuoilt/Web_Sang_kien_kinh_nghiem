@@ -33,3 +33,7 @@ Thumbs.db
 *.tmp
 *.bak
 tmp/
+
+# Excluded html entry
+index.html
+

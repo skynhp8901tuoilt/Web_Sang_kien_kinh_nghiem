@@ -918,3 +918,728 @@ body {
     gap: 0.4rem;
 }
 
+/* ==========================================================================
+   AI ECOSYSTEM & LESSON PLAN STYLING (MATCH USER INTERFACE SPEC)
+   ========================================================================== */
+.ai-ecosystem-banner {
+    background: linear-gradient(135deg, #fff0f6, #f3d9fa, #e7f5ff);
+    border: 2px solid #fcc2d7;
+    box-shadow: 0 8px 24px rgba(247, 131, 172, 0.15);
+}
+
+.ecosystem-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.brand-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.icon-sparkle {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #e8590c, #d63384);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    box-shadow: 0 4px 12px rgba(214, 51, 132, 0.3);
+}
+
+.brand-title h2 {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #c2255c;
+    letter-spacing: -0.5px;
+}
+
+.brand-title p {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+.header-action-pills {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pill-tag {
+    background: white;
+    color: #d63384;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.45rem 1rem;
+    border-radius: var(--radius-full);
+    border: 1px solid #fcc2d7;
+}
+
+.pill-btn.highlight {
+    background: linear-gradient(135deg, #d63384, #ae3ec9);
+    color: white;
+    border: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.45rem 1.1rem;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+}
+
+.ai-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.6rem;
+}
+
+.tool-chip {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: var(--radius-md);
+    padding: 0.6rem 0.5rem;
+    font-family: var(--font-family);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #343a40;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+.tool-chip:hover {
+    border-color: #d63384;
+    background: #fff0f6;
+    transform: translateY(-2px);
+}
+
+.action-toolbar-row {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.btn-action {
+    flex: 1;
+    min-width: 140px;
+    padding: 0.65rem 0.8rem;
+    border-radius: var(--radius-md);
+    border: none;
+    font-family: var(--font-family);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    transition: var(--transition-fast);
+}
+
+.btn-action.primary-blue { background: #1c7ed6; color: white; }
+.btn-action.danger-red { background: #e03131; color: white; }
+.btn-action.secondary-gray { background: #e9ecef; color: #343a40; }
+.btn-action.success-green { background: #12b886; color: white; }
+
+.digital-plan-header-banner {
+    background: linear-gradient(135deg, #d63384, #ae3ec9);
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.badge-digital-title { font-weight: 800; font-size: 0.95rem; }
+.badge-sub-year { font-size: 0.75rem; background: rgba(255,255,255,0.25); padding: 3px 8px; border-radius: 4px; }
+
+.doc-tags-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.doc-tag {
+    background: #e7f5ff;
+    color: #1971c2;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+.highlight-digital-badge {
+    background: #e6fcf5;
+    border-left: 4px solid #12b886;
+    padding: 0.75rem;
+    border-radius: 0 8px 8px 0;
+    margin-top: 0.5rem;
+    color: #0ca678;
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+}
+
+.styled-table th, .styled-table td {
+    border: 1px solid #dee2e6;
+    padding: 0.6rem 0.8rem;
+}
+
+.styled-table th { background: #f8f9fa; text-align: left; }
+
+.floating-ai-assistant {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: linear-gradient(135deg, #d63384, #e8590c);
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-full);
+    font-weight: 800;
+    box-shadow: 0 8px 24px rgba(214, 51, 132, 0.4);
+    cursor: pointer;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition-normal);
+}
+
+.floating-ai-assistant:hover { transform: scale(1.05); }
+
+/* Materials & Games Styling */
+.materials-banner-card, .games-banner-card {
+    background: white;
+    border-top: 4px solid var(--primary-color);
+}
+
+.banner-content-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.filter-controls-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.search-input-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input-box i {
+    position: absolute;
+    left: 0.8rem;
+    color: var(--text-muted);
+}
+
+.search-input-box input {
+    padding-left: 2.2rem;
+}
+
+.materials-grid, .games-catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.material-card-box, .game-card-box {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: var(--transition-normal);
+}
+
+.material-card-box:hover, .game-card-box:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+}
+
+.category-badge, .game-type-badge {
+    background: #fff0f6;
+    color: #d63384;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.age-badge, .game-age-badge {
+    background: #e7f5ff;
+    color: #1971c2;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.material-title, .game-card-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin: 0.5rem 0;
+    color: var(--dark-color);
+}
+
+.material-desc, .game-card-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    flex: 1;
+}
+
+.material-meta-footer, .game-card-footer {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f1f3f5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.meta-stats {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+}
+
+.compact-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+/* Active Game Player */
+.active-game-player-card {
+    background: #fff0f6;
+    border: 2px solid #fcc2d7;
+}
+
+.game-player-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-game-btn {
+    border: none;
+    background: #e03131;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.game-score-badge {
+    background: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.question-box {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.question-icon {
+    font-size: 2.5rem;
+    color: #d63384;
+    margin-bottom: 0.5rem;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+}
+
+.option-btn {
+    background: white;
+    border: 2px solid #e9ecef;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-family: var(--font-family);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: var(--transition-fast);
+}
+
+.option-btn:hover {
+    border-color: #d63384;
+    background: #fff0f6;
+}
+
+.option-idx {
+    background: #f1f3f5;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #d63384;
+}
+
+.saved-plans-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.saved-plan-item {
+    background: #f8f9fa;
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.saved-plan-item:hover {
+    background: #e7f5ff;
+    border-color: #74c0fc;
+}
+
+.plan-item-info {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8rem;
+}
+
+.admin-stats-summary {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.stat-pill {
+    background: #f8f9fa;
+    border: 1px solid var(--border-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+}
+
+.prompt-textbox {
+    font-family: monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   UI MATCHING USER ATTACHED SCREENSHOT (HỆ SINH THÁI AI CÔ THỦY MẦM NON)
+   ========================================================================== */
+.logo-icon-pink {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #d63384, #e8590c);
+    color: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    box-shadow: 0 4px 12px rgba(214, 51, 132, 0.3);
+}
+
+.brand-title-main {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #d63384;
+    letter-spacing: -0.5px;
+}
+
+.brand-sub-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+.ai-ecosystem-banner-pink {
+    background: #ffffff;
+    border: 1.5px solid #fcc2d7;
+    border-radius: 18px;
+    padding: 1.5rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+
+.banner-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.brand-header-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.brand-badge-flower {
+    font-size: 2rem;
+    background: #fff0f6;
+    border: 1px solid #fcc2d7;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand-header-title h2 {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: #d63384;
+}
+
+.brand-header-title p {
+    font-size: 0.82rem;
+    color: #495057;
+}
+
+.banner-quick-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pill-btn-white {
+    background: #ffffff;
+    border: 1px solid #ced4da;
+    color: #495057;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.45rem 1.1rem;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.pill-btn-dark {
+    background: #212529;
+    color: white;
+    border: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.45rem 1.1rem;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.ecosystem-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f8f9fa;
+    padding-top: 0.75rem;
+}
+
+.ecosystem-title-tag {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #d63384;
+}
+
+.ecosystem-author-tag {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #d63384;
+    background: #fff0f6;
+    padding: 2px 10px;
+    border-radius: 999px;
+    border: 1px solid #fcc2d7;
+}
+
+/* 12 Tool Cards Grid (Matches UI Screenshot) */
+.tools-grid-12 {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.75rem;
+}
+
+@media (max-width: 1024px) {
+    .tools-grid-12 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .tools-grid-12 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.tool-card-btn {
+    border-radius: 12px;
+    padding: 0.75rem 0.5rem;
+    font-family: var(--font-family);
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: var(--transition-fast);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.tool-card-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.color-pink { background: #fff0f6; color: #d63384; border: 1px solid #fcc2d7; }
+.color-yellow { background: #fff9db; color: #f08c00; border: 1px solid #ffe066; }
+.color-purple { background: #f3d9fa; color: #ae3ec9; border: 1px solid #eebefa; }
+.color-green { background: #e6fcf5; color: #0ca678; border: 1px solid #96f2d7; }
+.color-blue { background: #e7f5ff; color: #1c7ed6; border: 1px solid #a5d8ff; }
+.color-red { background: #ffe3e3; color: #e03131; border: 1px solid #ffc9c9; }
+.color-teal { background: #e6fffa; color: #0b7285; border: 1px solid #99e9f2; }
+.color-indigo { background: #edf2ff; color: #4263eb; border: 1px solid #bac8ff; }
+.color-cyan { background: #e3fafc; color: #1098ad; border: 1px solid #99e9f2; }
+.color-emerald { background: #ebfbee; color: #2b8a3e; border: 1px solid #b2f2bb; }
+.color-sky { background: #e7f5ff; color: #1971c2; border: 1px solid #74c0fc; }
+.color-violet { background: #f3d9fa; color: #9c36b5; border: 1px solid #d0bfff; }
+
+/* Action Toolbar Buttons */
+.action-row-buttons {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.btn-pill {
+    padding: 0.65rem 1.1rem;
+    border-radius: 999px;
+    border: none;
+    font-family: var(--font-family);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: var(--transition-fast);
+}
+
+.btn-word { background: #1c7ed6; color: white; }
+.btn-pdf { background: #e03131; color: white; }
+.btn-copy { background: #e9ecef; color: #343a40; }
+.btn-edit { background: #e9ecef; color: #343a40; }
+.btn-save-pink { background: #d63384; color: white; }
+
+.btn-pill:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* Main Lesson Plan Document Display */
+.doc-banner-pink-gradient {
+    background: linear-gradient(135deg, #d63384, #e8590c);
+    color: white;
+    padding: 0.85rem 1.25rem;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 14px rgba(214, 51, 132, 0.3);
+}
+
+.doc-banner-title { font-weight: 900; font-size: 1.05rem; letter-spacing: 0.5px; }
+.doc-banner-subtitle { font-size: 0.78rem; background: rgba(255,255,255,0.25); padding: 3px 10px; border-radius: 4px; font-weight: 700; }
+
+.doc-title-magenta {
+    color: #d63384;
+    font-size: 1.65rem;
+    font-weight: 900;
+    margin: 1rem 0 0.5rem 0;
+    text-align: center;
+}
+
+.doc-sub-meta-tags {
+    text-align: center;
+    font-size: 0.88rem;
+    color: #495057;
+}
+
+.digital-competency-card {
+    background: #e6fcf5;
+    border-left: 4px solid #12b886;
+    padding: 0.85rem;
+    border-radius: 0 10px 10px 0;
+    margin-top: 0.75rem;
+    color: #0ca678;
+    font-size: 0.92rem;
+}
+
+.floating-assistant-pink {
+    position: fixed;
+    bottom: 1.8rem;
+    right: 1.8rem;
+    background: linear-gradient(135deg, #d63384, #e8590c);
+    color: white;
+    padding: 0.75rem 1.35rem;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.92rem;
+    box-shadow: 0 8px 24px rgba(214, 51, 132, 0.4);
+    cursor: pointer;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition-normal);
+}
+
+.floating-assistant-pink:hover {
+    transform: scale(1.06);
+    box-shadow: 0 10px 28px rgba(214, 51, 132, 0.5);
+}
+
+
+

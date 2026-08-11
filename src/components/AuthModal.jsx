@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import supabase from '../config/supabase';
+import supabase, { logUserLogin } from '../config/supabase';
 
 export default function AuthModal({ isOpen, onLoginSuccess, showToast }) {
   const [activeSubTab, setActiveSubTab] = useState('login'); // 'login' | 'register'
@@ -30,31 +30,42 @@ export default function AuthModal({ isOpen, onLoginSuccess, showToast }) {
     const email = loginVal.includes('@') ? loginVal : `${loginVal.toLowerCase()}@gmail.com`;
     const username = loginVal.includes('@') ? loginVal.split('@')[0] : loginVal;
 
+    let sysRole = email === 'skynhp8901@gmail.com' || username === 'skynhp8901' ? 'ROLE_ADMIN' : 'ROLE_TEACHER';
+    let userFullName = username === 'skynhp8901' ? 'Quản trị viên skynhp8901' : `Cô ${username}`;
+
     try {
       if (supabase) {
-        // Đồng bộ dữ liệu tài khoản vào bảng profiles trên Supabase
-        await supabase.from('profiles').upsert({
-          email: email,
-          full_name: username === 'skynhp8901' ? 'Quản trị viên skynhp8901' : `Giáo viên ${username}`,
-          school_name: 'Trường Mầm non Hoa Sen',
-          system_role: email === 'skynhp8901@gmail.com' ? 'ROLE_ADMIN' : 'ROLE_TEACHER',
-          last_login_at: new Date().toISOString()
-        }, { onConflict: 'email' });
+        // Attempt Supabase Auth login
+        const { data: authData } = await supabase.auth.signInWithPassword({ email, password: loginPass });
 
-        // Đồng bộ nhật ký đăng nhập vào bảng user_login_logs trên Supabase
-        await supabase.from('user_login_logs').insert({
-          email: email,
-          login_time: new Date().toISOString(),
-          ip_address: '113.161.42.18',
-          user_agent: navigator.userAgent,
-          provider: 'Supabase Web Sync',
-          status: 'SUCCESS'
-        });
+        // Query profile from Supabase DB to get current system_role
+        const { data: prof } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('email', email)
+          .single();
 
-        await supabase.auth.signInWithPassword({ email, password: loginPass });
+        if (prof) {
+          sysRole = prof.system_role || sysRole;
+          userFullName = prof.full_name || userFullName;
+          // Update last login
+          await supabase.from('profiles').update({ last_login_at: new Date().toISOString() }).eq('id', prof.id);
+        } else {
+          // Upsert new profile
+          await supabase.from('profiles').upsert({
+            email: email,
+            full_name: userFullName,
+            school_name: 'Trường Mầm non Hoa Sen',
+            system_role: sysRole,
+            last_login_at: new Date().toISOString()
+          }, { onConflict: 'email' });
+        }
+
+        // Record Audit Login Log
+        await logUserLogin(email, prof?.id || null, 'Supabase Auth');
       }
     } catch (err) {
-      console.warn('Supabase sync warning:', err);
+      console.warn('Supabase auth warning:', err.message);
     }
 
     setTimeout(() => {
@@ -62,10 +73,12 @@ export default function AuthModal({ isOpen, onLoginSuccess, showToast }) {
       onLoginSuccess({
         email,
         username,
-        provider: 'Supabase DB Sync'
+        fullname: userFullName,
+        system_role: sysRole,
+        provider: 'Supabase DB'
       });
-      showToast(`Đăng nhập thành công & đã đồng bộ 100% tài khoản [${username}] lên Supabase DB!`, 'success');
-    }, 600);
+      showToast(`Đăng nhập thành công! Quyền hạn: [${sysRole}]`, 'success');
+    }, 500);
   };
 
   const handleRegisterSubmit = async (e) => {
@@ -84,27 +97,11 @@ export default function AuthModal({ isOpen, onLoginSuccess, showToast }) {
     }
 
     setLoading(true);
+    const sysRole = regEmail === 'skynhp8901@gmail.com' ? 'ROLE_ADMIN' : 'ROLE_TEACHER';
+
     try {
       if (supabase) {
-        // Đồng bộ tài khoản mới đăng ký trực tiếp vào bảng profiles trên Supabase Cloud
-        await supabase.from('profiles').upsert({
-          email: regEmail,
-          full_name: regFullname,
-          school_name: regSchool,
-          system_role: regEmail === 'skynhp8901@gmail.com' ? 'ROLE_ADMIN' : 'ROLE_TEACHER',
-          last_login_at: new Date().toISOString()
-        }, { onConflict: 'email' });
-
-        // Ghi nhật ký đăng ký mới vào user_login_logs
-        await supabase.from('user_login_logs').insert({
-          email: regEmail,
-          login_time: new Date().toISOString(),
-          ip_address: '113.161.42.18',
-          user_agent: navigator.userAgent,
-          provider: 'Supabase Register Sync',
-          status: 'REGISTER_SUCCESS'
-        });
-
+        // Register in Supabase Auth
         await supabase.auth.signUp({
           email: regEmail,
           password: regPass,
@@ -112,9 +109,21 @@ export default function AuthModal({ isOpen, onLoginSuccess, showToast }) {
             data: { username: regUsername, full_name: regFullname, school_name: regSchool }
           }
         });
+
+        // Insert into profiles DB
+        await supabase.from('profiles').upsert({
+          email: regEmail,
+          full_name: regFullname,
+          school_name: regSchool,
+          system_role: sysRole,
+          last_login_at: new Date().toISOString()
+        }, { onConflict: 'email' });
+
+        // Record Login Log
+        await logUserLogin(regEmail, null, 'Register Account');
       }
     } catch (err) {
-      console.warn('Supabase register sync warning:', err);
+      console.warn('Supabase register error:', err.message);
     }
 
     setTimeout(() => {
@@ -124,10 +133,11 @@ export default function AuthModal({ isOpen, onLoginSuccess, showToast }) {
         username: regUsername,
         fullname: regFullname,
         school: regSchool,
-        provider: 'Supabase DB Sync'
+        system_role: sysRole,
+        provider: 'Supabase DB'
       });
-      showToast(`Đăng ký tài khoản [${regUsername}] thành công & đã lưu dữ liệu trực tiếp vào Supabase Table Editor!`, 'success');
-    }, 800);
+      showToast(`Đăng ký tài khoản thành công! Phân quyền: [${sysRole}]`, 'success');
+    }, 600);
   };
 
   return (
@@ -135,8 +145,8 @@ export default function AuthModal({ isOpen, onLoginSuccess, showToast }) {
       <div class="auth-card">
         <div class="auth-card-header">
           <div class="auth-badge-icon"><i class="fa-solid fa-lock"></i></div>
-          <h2>Hệ Thống Đăng Nhập & Đăng Ký Cá Nhân</h2>
-          <p class="auth-sub">Đồng bộ 100% dữ liệu với Cơ sở dữ liệu Supabase Database</p>
+          <h2>Hệ Thống Đăng Nhập & Đăng Ký Supabase</h2>
+          <p class="auth-sub">Đồng bộ dữ liệu thực tế với Cơ sở dữ liệu Supabase Database & Auth</p>
 
           <div class="auth-switcher-tabs">
             <button 
@@ -164,7 +174,7 @@ export default function AuthModal({ isOpen, onLoginSuccess, showToast }) {
                 <input 
                   type="text" 
                   class="form-control" 
-                  placeholder="skynhp8901 hoặc skynhp8901@gmail.com..." 
+                  placeholder="skynhp8901@gmail.com..." 
                   value={loginVal}
                   onChange={(e) => setLoginVal(e.target.value)}
                   required 
@@ -203,7 +213,7 @@ export default function AuthModal({ isOpen, onLoginSuccess, showToast }) {
               <div class="form-grid-2 margin-top-sm">
                 <div class="form-group">
                   <label><i class="fa-solid fa-id-card"></i> Họ Và Tên Giáo Viên:</label>
-                  <input type="text" class="form-control" placeholder="Cô Nguyễn Thị Phương Thảo..." value={regFullname} onChange={(e) => setRegFullname(e.target.value)} required />
+                  <input type="text" class="form-control" placeholder="Cô Phạm Thị Thanh Thảo..." value={regFullname} onChange={(e) => setRegFullname(e.target.value)} required />
                 </div>
                 <div class="form-group">
                   <label><i class="fa-solid fa-school"></i> Trường Mầm Non:</label>
@@ -223,7 +233,7 @@ export default function AuthModal({ isOpen, onLoginSuccess, showToast }) {
               </div>
 
               <button type="submit" class="btn-secondary full-width margin-top" disabled={loading}>
-                {loading ? <><i class="fa-solid fa-spinner fa-spin"></i> Đang Tạo Tài Khoản & Đồng Bộ...</> : <><i class="fa-solid fa-user-plus"></i> Hoàn Tất Đăng Ký & Đồng Bộ Supabase</>}
+                {loading ? <><i class="fa-solid fa-spinner fa-spin"></i> Đang Tạo Tài Khoản...</> : <><i class="fa-solid fa-user-plus"></i> Hoàn Tất Đăng Ký & Lưu CSDL</>}
               </button>
             </form>
           )}
@@ -236,8 +246,14 @@ export default function AuthModal({ isOpen, onLoginSuccess, showToast }) {
             type="button" 
             class="btn-google-login full-width" 
             onClick={() => {
-              onLoginSuccess({ email: 'skynhp8901@gmail.com', username: 'skynhp8901', provider: 'Google' });
-              showToast('Đăng nhập thành công bằng Google Auth!', 'success');
+              onLoginSuccess({
+                email: 'skynhp8901@gmail.com',
+                username: 'skynhp8901',
+                fullname: 'Quản trị viên skynhp8901',
+                system_role: 'ROLE_ADMIN',
+                provider: 'Google Auth'
+              });
+              showToast('Đăng nhập thành công bằng Google Auth (Tài khoản Quản trị viên Admin)!', 'success');
             }}
           >
             <svg class="google-icon" viewBox="0 0 24 24" width="18" height="18">
@@ -246,7 +262,7 @@ export default function AuthModal({ isOpen, onLoginSuccess, showToast }) {
               <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.62z"/>
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
             </svg>
-            <span>Đăng Nhập Nhanh Bằng Google</span>
+            <span>Đăng Nhập Nhanh Bằng Google (ROLE_ADMIN)</span>
           </button>
         </div>
       </div>

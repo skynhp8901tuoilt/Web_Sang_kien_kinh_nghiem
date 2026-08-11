@@ -37,7 +37,7 @@ function Header({ user, sessionTime, onOpenDbModal, onLogout }) {
             <i className="fa-solid fa-graduation-cap"></i>
           </div>
           <div className="logo-text">
-            <span className="brand-title-main">ÁP GIÁO ÁN CÔ THỦY – MẦM NON</span>
+            <span className="brand-title-main">APP GIÁO ÁN CÔ TƯƠI – MẦM NON</span>
             <span className="brand-sub-title">Trợ lý AI chuyên nghiệp chuẩn chương trình Bộ GD&ĐT Việt Nam</span>
           </div>
         </div>
@@ -375,7 +375,7 @@ function LessonPlanTab({ showToast, user }) {
             <div className="brand-header-title">
               <span className="brand-badge-flower">🌸</span>
               <div>
-                <h2>ÁP GIÁO ÁN CÔ THỦY – MẦM NON</h2>
+                <h2>APP GIÁO ÁN CÔ TƯƠI – MẦM NON</h2>
                 <p>Trợ lý AI chuyên nghiệp chuẩn chương trình Bộ GD&ĐT Việt Nam</p>
               </div>
             </div>
@@ -387,7 +387,7 @@ function LessonPlanTab({ showToast, user }) {
 
           <div className="ecosystem-section-header margin-top-sm">
             <span className="ecosystem-title-tag">✨ Hệ Sinh Thái Công Cụ AI & Tiện Ích Mở Rộng</span>
-            <span className="ecosystem-author-tag">Cô Thủy Ecosystem</span>
+            <span className="ecosystem-author-tag">Cô Tươi Ecosystem</span>
           </div>
 
           {/* 12 Pastel Tool Cards (Exactly matching screenshot) */}
@@ -479,9 +479,9 @@ function LessonPlanTab({ showToast, user }) {
         </div>
       </main>
 
-      {/* Floating Robot Widget "Trợ Lý AI Cô Thủy" (Matches screenshot bottom right) */}
-      <div className="floating-assistant-pink" onClick={() => showToast('Trợ lý AI Cô Thủy luôn sẵn sàng đồng hành cùng thầy/Cô!', 'info')}>
-        <i className="fa-solid fa-robot"></i> <span>Trợ Lý AI Cô Thủy</span>
+      {/* Floating Robot Widget "Trợ Lý AI Cô Tươi" (Matches screenshot bottom right) */}
+      <div className="floating-assistant-pink" onClick={() => showToast('Trợ lý AI Cô Tươi luôn sẵn sàng đồng hành cùng thầy/Cô!', 'info')}>
+        <i className="fa-solid fa-robot"></i> <span>Trợ Lý AI Cô Tươi</span>
       </div>
 
       {/* Prompt Extension Modal */}

@@ -355,7 +355,7 @@ export default function LessonPlanTab({ showToast, user }) {
             <div class="brand-title">
               <span class="icon-sparkle"><i class="fa-solid fa-heart-pulse"></i></span>
               <div>
-                <h2>ÁP GIÁO ÁN CÔ THỦY – MẦM NON</h2>
+                <h2>APP GIÁO ÁN CÔ TƯƠI – MẦM NON</h2>
                 <p>Trợ lý AI chuyên nghiệp chuẩn chương trình Bộ GD&ĐT Việt Nam 2026</p>
               </div>
             </div>
@@ -438,8 +438,8 @@ export default function LessonPlanTab({ showToast, user }) {
       </main>
 
       {/* Floating AI Assistant Badge */}
-      <div class="floating-ai-assistant" onClick={() => showToast('Trợ lý AI Cô Thủy luôn sẵn sàng hỗ trợ thầy Cô 24/7!', 'info')}>
-        <i class="fa-solid fa-robot"></i> <span>Trợ Lý AI Cô Thủy</span>
+      <div class="floating-ai-assistant" onClick={() => showToast('Trợ lý AI Cô Tươi luôn sẵn sàng hỗ trợ thầy Cô 24/7!', 'info')}>
+        <i class="fa-solid fa-robot"></i> <span>Trợ Lý AI Cô Tươi</span>
       </div>
 
       {/* AI Prompt Extension Modal */}
